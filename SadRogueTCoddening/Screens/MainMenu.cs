@@ -1,11 +1,8 @@
 ﻿using System;
-using GoRogue.GameFramework;
-using GoRogue.Random;
 using SadConsole;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
 using SadRogueTCoddening.MapObjects.Components;
-using ShaiRandom.Generators;
 
 namespace SadRogueTCoddening.Screens;
 
@@ -51,13 +48,10 @@ public class MainMenu : ControlsConsole
         // Create player entity
         Engine.Player = MapObjects.Factory.Player();
         
-        // Generate a dungeon map
+        // Generate a dungeon map, and spawn the player/enemies
         var map = Maps.Factory.Dungeon(Constants.MapWidth, Constants.MapHeight);
         
-        // TODO: Move this part to map gen
-        // Generate player, add to map at a random walkable position, and calculate initial FOV
-        Engine.Player.Position = GlobalRandom.DefaultRNG.RandomPosition(map.WalkabilityView, true);
-        map.AddEntity(Engine.Player);
+        // Calculate initial FOV for player
         Engine.Player.AllComponents.GetFirst<PlayerFOVController>().CalculateFOV();
 
         // Create a MapScreen and set it as the active screen so that it processes input and renders itself.

@@ -36,6 +36,10 @@ namespace SadRogueTCoddening.Maps
             // system.
             map.ApplyTerrainOverlay(generatedMap, (pos, val) => val ? MapObjects.Factory.Floor(pos) : MapObjects.Factory.Wall(pos));
 
+            // Add player to map at a random walkable position
+            Engine.Player.Position = GlobalRandom.DefaultRNG.RandomPosition(map.WalkabilityView, true);
+            map.AddEntity(Engine.Player);
+            
             // Generate 10 enemies, placing them in random walkable locations for demo purposes.
             for (int i = 0; i < 10; i++)
             {
