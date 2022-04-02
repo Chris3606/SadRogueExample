@@ -5,7 +5,7 @@ using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogue.Primitives;
 
-namespace SadRogueTCoddening
+namespace SadRogueTCoddening.MapObjects.Components
 {
     /// <summary>
     /// Component that you can attach to your player object to ensure that it re-calculates the map's FOV whenever the
@@ -34,12 +34,12 @@ namespace SadRogueTCoddening
         public void CalculateFOV()
             => Parent?.CurrentMap?.PlayerFOV.Calculate(Parent.Position, FOVRadius, Parent.CurrentMap.DistanceMeasurement);
 
-        private void OnAdded(object s, EventArgs e) => Parent!.Moved += OnMoved;
+        private void OnAdded(object? s, EventArgs e) => Parent!.Moved += OnMoved;
 
-        private void OnRemoved(object s, ParentAwareComponentRemovedEventArgs<RogueLikeEntity> e)
+        private void OnRemoved(object? s, ParentAwareComponentRemovedEventArgs<RogueLikeEntity> e)
             => e.OldParent.Moved -= OnMoved;
 
-        private void OnMoved(object sender, GameObjectPropertyChanged<Point> e)
+        private void OnMoved(object? sender, GameObjectPropertyChanged<Point> e)
             => CalculateFOV();
     }
 }

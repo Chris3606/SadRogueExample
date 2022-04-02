@@ -1,7 +1,8 @@
-﻿using SadConsole;
+﻿using System.Diagnostics.CodeAnalysis;
+using SadConsole;
 using SadRogue.Primitives;
 
-namespace SadRogueTCoddening
+namespace SadRogueTCoddening.Screens.Surfaces
 {
     /// <summary>
     /// A very basic SadConsole Console subclass that acts as a game message log.
@@ -23,12 +24,13 @@ namespace SadRogueTCoddening
             Initialize();
         }
 
-        public MessageLogConsole(ICellSurface surface, IFont font = null, Point? fontSize = null)
+        public MessageLogConsole(ICellSurface surface, IFont? font = null, Point? fontSize = null)
             : base(surface, font, fontSize)
         {
             Initialize();
         }
 
+        [MemberNotNull(nameof(_lastMessage))]
         private void Initialize()
         {
             Cursor.AutomaticallyShiftRowsUp = true;

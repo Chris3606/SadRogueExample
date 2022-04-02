@@ -2,7 +2,7 @@
 using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
 
-namespace SadRogueTCoddening
+namespace SadRogueTCoddening.MapObjects.Components
 {
     /// <summary>
     /// Subclass of the integration library's keybindings component that moves enemies as appropriate when the player
@@ -14,9 +14,11 @@ namespace SadRogueTCoddening
     /// </remarks>
     internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
     {
+        
         protected override void MotionHandler(Direction direction)
         {
-            if (!Parent!.CanMoveIn(direction)) return;
+            if (Parent == null) return;
+            if (!Parent.CanMoveIn(direction)) return;
 
             Parent.Position += direction;
 
