@@ -23,7 +23,7 @@ namespace SadRogueTCoddening.Maps
             var generator = new Generator(100, 60)
                 .ConfigAndGenerateSafe(gen =>
                 {
-                    gen.AddSteps(DefaultAlgorithms.DungeonMazeMapSteps(minRooms: 20, maxRooms: 30, roomMinSize: 8, roomMaxSize: 12));
+                    gen.AddSteps(DefaultAlgorithms.DungeonMazeMapSteps(minRooms: 20, maxRooms: 30, roomMinSize: 8, roomMaxSize: 12, saveDeadEndChance: 0));
                 });
 
             var generatedMap = generator.Context.GetFirst<ISettableGridView<bool>>("WallFloor");
@@ -48,7 +48,7 @@ namespace SadRogueTCoddening.Maps
             // and a 20% chance of being a troll (stronger).
             foreach (var room in rooms.Items)
             {
-                int enemies = GlobalRandom.DefaultRNG.NextInt(0, 3);
+                int enemies = GlobalRandom.DefaultRNG.NextInt(1, 3);
                 for (int i = 0; i < enemies; i++)
                 {
                     bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);

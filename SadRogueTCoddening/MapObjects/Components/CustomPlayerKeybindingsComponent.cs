@@ -1,4 +1,4 @@
-﻿using GoRogue.GameFramework;
+﻿using SadRogue.Integration;
 using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
 
@@ -8,25 +8,21 @@ namespace SadRogueTCoddening.MapObjects.Components
     /// Subclass of the integration library's keybindings component that moves enemies as appropriate when the player
     /// moves.
     /// </summary>
-    /// <remarks>
-    /// CUSTOMIZATION: Components can also be attached to maps, so the code for calling TakeTurn on all entities could
-    /// be moved to a map component as well so that it is more re-usable by code that doesn't pertain to movement.
-    /// </remarks>
     internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
     {
-        
         protected override void MotionHandler(Direction direction)
         {
             if (Parent == null) return;
-            if (!Parent.CanMoveIn(direction)) return;
 
-            Parent.Position += direction;
-
-            foreach (var entity in Parent.CurrentMap!.Entities.Items)
+            // If we're waiting a turn, no need to bump anything.
+            if (direction != Direction.None)
             {
-                var ai = entity.GoRogueComponents.GetFirstOrDefault<DemoEnemyAI>();
-                ai?.TakeTurn();
+                var result = MapObjects.Actions.Bump((RogueLikeEntity)Parent, direction);
+                if (!result) return; // If we didn't do anything, we won't count this as an action.
             }
+            
+            // Otherwise, we took an action, so end turn
+            MapObjects.Actions.TakeEnemyTurns(Parent.CurrentMap!);
         }
     }
 }
