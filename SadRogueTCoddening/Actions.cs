@@ -16,7 +16,7 @@ internal static class Actions
     public static bool Bump(RogueLikeEntity entity, Direction direction)
     {
         if (entity.CurrentMap == null) return false;
-        
+
         // Move if nothing blocks
         if (entity.CanMoveIn(direction))
         {

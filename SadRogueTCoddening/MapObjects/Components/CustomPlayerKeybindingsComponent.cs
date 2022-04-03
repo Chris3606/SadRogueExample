@@ -1,6 +1,7 @@
 ﻿using SadRogue.Integration;
 using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
+using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 
@@ -18,8 +19,14 @@ internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
         if (direction != Direction.None)
         {
             var result = SadRogueTCoddening.Actions.Bump((RogueLikeEntity)Parent, direction);
-            if (!result) return; // If we didn't do anything, we won't count this as an action.
+            // If we didn't do anything, we won't count this as an action.
+            if (!result)
+            {
+                Engine.GameScreen?.MessageLog.AddMessage(new ("That way is blocked.", MessageColors.ImpossibleActionAppearance));
+                return; 
+            }
         }
+        
             
         // Otherwise, we took an action, so end turn and let the enemies take theirs (unless the player somehow died
         // on their turn in which case we'll return)

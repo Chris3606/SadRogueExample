@@ -23,4 +23,9 @@ internal static class MessageColors
     {
         Foreground = new(0xFF, 0xA0, 0x30)
     };
+
+    public static readonly ColoredString.ColoredGlyphEffect ImpossibleActionAppearance = new()
+    {
+        Foreground = new(0x80, 0x80, 0x80)
+    };
 }
