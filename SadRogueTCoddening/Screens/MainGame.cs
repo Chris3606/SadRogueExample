@@ -1,8 +1,7 @@
 ﻿using SadConsole;
-using SadConsole.UI;
-using SadRogue.Primitives;
 using SadRogueTCoddening.Maps;
 using SadRogueTCoddening.Screens.Surfaces;
+using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening.Screens;
 
@@ -13,7 +12,7 @@ internal class MainGame : ScreenObject
 {
     public readonly GameMap Map;
     public readonly MessageLogConsole MessageLog;
-    public readonly ControlsConsole StatusPanel;
+    public readonly Surfaces.StatusPanel StatusPanel;
     
     public readonly SadConsole.Components.SurfaceComponentFollowTarget ViewLock;
 
@@ -42,12 +41,11 @@ internal class MainGame : ScreenObject
         MessageLog.Position = new(StatusBarWidth + 1, Constants.ScreenHeight - BottomPanelHeight);
         
         // Create status panel
-        StatusPanel = new ControlsConsole(StatusBarWidth, BottomPanelHeight);
+        StatusPanel = new (StatusBarWidth, BottomPanelHeight);
         StatusPanel.Parent = this;
         StatusPanel.Position = new(0, Constants.ScreenHeight - BottomPanelHeight);
-        StatusPanel.FillWithRandomGarbage(255);
         
         // Write welcome message
-        MessageLog.AddMessage(new("Hello and welcome, adventurer, to yet another dungeon!", Constants.WelcomeTextColor, Color.Transparent));
+        MessageLog.AddMessage(new("Hello and welcome, adventurer, to yet another dungeon!", MessageColors.WelcomeTextAppearance));
     }
 }

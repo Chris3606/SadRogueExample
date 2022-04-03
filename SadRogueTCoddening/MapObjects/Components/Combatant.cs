@@ -1,7 +1,7 @@
 ﻿using System;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
-using SadRogue.Primitives;
+using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 
@@ -17,11 +17,17 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         get => _hp;
         private set
         {
+            if (_hp == value) return;
+            
             _hp = Math.Max(0, value);
+            HPChanged?.Invoke(this, EventArgs.Empty);
+            
             if (_hp == 0)
                 Died?.Invoke(this, EventArgs.Empty);
         }
     }
+
+    public event EventHandler? HPChanged;
 
     public event EventHandler? Died;
 
@@ -42,14 +48,14 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         int damage = Power - target.Defense;
         string attackDesc = $"{Parent!.Name} attacks {target.Parent!.Name}";
 
-        var atkTextColor = Parent == Engine.Player ? Constants.PlayerAtkTextColor : Constants.EnemyAtkTextColor;
+        var atkTextColor = Parent == Engine.Player ? MessageColors.PlayerAtkAppearance : MessageColors.EnemyAtkAtkAppearance;
         if (damage > 0)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor, Color.Transparent));
+            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor));
             target.HP -= damage;
         }
         else
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} but does no damage.", atkTextColor, Color.Transparent));
+            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} but does no damage.", atkTextColor));
     }
 
     public bool OnBumped(RogueLikeEntity source)

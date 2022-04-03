@@ -7,6 +7,7 @@ using SadRogue.Primitives;
 using SadRogueTCoddening.MapObjects.Components;
 using SadRogueTCoddening.Maps;
 using SadRogueTCoddening.Screens;
+using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening;
 
@@ -45,7 +46,7 @@ internal static class Actions
     public static void HostileDeath(object? s, EventArgs e)
     {
         var hostile = ((Combatant)s!).Parent!;
-        Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!", Constants.EnemyDiedTextColor, Color.Transparent));
+        Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!", MessageColors.EnemyDiedAppearance));
         
         // Switch entity for corpse
         var map = hostile.CurrentMap!;
