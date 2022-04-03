@@ -1,6 +1,9 @@
-﻿using GoRogue.MapGeneration;
+﻿using System;
+using GoRogue.MapGeneration;
+using GoRogue.MapGeneration.ContextComponents;
 using GoRogue.Random;
 using SadRogue.Integration.FieldOfView.Memory;
+using SadRogue.Primitives;
 using SadRogue.Primitives.GridViews;
 using ShaiRandom.Generators;
 
@@ -14,13 +17,13 @@ namespace SadRogueTCoddening.Maps
     /// </remarks>
     internal static class Factory
     {
-        public static GameMap Dungeon(int width, int height)
+        public static GameMap Dungeon()
         {
-            // Generate a rectangular map for the sake of testing with GoRogue's map generation system.
-            var generator = new Generator(width, height)
+            // Generate a dungeon maze map
+            var generator = new Generator(100, 60)
                 .ConfigAndGenerateSafe(gen =>
                 {
-                    gen.AddSteps(DefaultAlgorithms.RectangleMapSteps());
+                    gen.AddSteps(DefaultAlgorithms.DungeonMazeMapSteps(minRooms: 20, maxRooms: 30, roomMinSize: 8, roomMaxSize: 12));
                 });
 
             var generatedMap = generator.Context.GetFirst<ISettableGridView<bool>>("WallFloor");
@@ -36,19 +39,36 @@ namespace SadRogueTCoddening.Maps
             // system.
             map.ApplyTerrainOverlay(generatedMap, (pos, val) => val ? MapObjects.Factory.Floor(pos) : MapObjects.Factory.Wall(pos));
 
-            // Add player to map at a random walkable position
-            Engine.Player.Position = GlobalRandom.DefaultRNG.RandomPosition(map.WalkabilityView, true);
+            // Add player to map at the center of the first room we placed
+            var rooms = generator.Context.GetFirst<ItemList<Rectangle>>("Rooms");
+            Engine.Player.Position = rooms.Items[0].Center;
             map.AddEntity(Engine.Player);
             
-            // Generate 10 enemies, placing them in random walkable locations for demo purposes.
-            for (int i = 0; i < 10; i++)
+            // Generate between zero and two monsters per room.  Each monster has an 80% chance of being an orc (weaker)
+            // and a 20% chance of being a troll (stronger).
+            foreach (var room in rooms.Items)
             {
-                var enemy = MapObjects.Factory.Enemy();
-                enemy.Position = GlobalRandom.DefaultRNG.RandomPosition(map.WalkabilityView, true);
-                map.AddEntity(enemy);
+                int enemies = GlobalRandom.DefaultRNG.NextInt(0, 3);
+                for (int i = 0; i < enemies; i++)
+                {
+                    bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
+                    
+                    var enemy = isOrc ? MapObjects.Factory.Orc() : MapObjects.Factory.Troll();
+                    enemy.Position = RandomPositionFromRect(GlobalRandom.DefaultRNG, room, pos => map.WalkabilityView[pos]);
+                    map.AddEntity(enemy);
+                }
             }
 
             return map;
+        }
+
+        private static Point RandomPositionFromRect(IEnhancedRandom rng, Rectangle rect, Func<Point, bool> selector)
+        {
+            var pos = new Point(rng.NextInt(rect.X, rect.X + rect.Width), rng.NextInt(rect.Y, rect.Y + rect.Height));
+            while (!selector(pos))
+                pos = new Point(rng.NextInt(rect.X, rect.X + rect.Width), rng.NextInt(rect.Y, rect.Y + rect.Height));
+
+            return pos;
         }
     }
 }

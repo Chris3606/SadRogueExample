@@ -39,15 +39,27 @@ namespace SadRogueTCoddening.MapObjects
             return player;
         }
 
-        public static RogueLikeEntity Enemy()
+        public static RogueLikeEntity Orc()
         {
-            var enemy = new RogueLikeEntity(Color.Red, 'g', false, layer: (int)GameMap.Layer.Monsters);
-
-            // Add AI component to path toward player when in view
-            enemy.AllComponents.Add(new DemoEnemyAI());
-
+            var enemy = new RogueLikeEntity(new Color(63, 127, 63), 'o', false, layer: (int)GameMap.Layer.Monsters);
             return enemy;
         }
+        
+        public static RogueLikeEntity Troll()
+        {
+            var enemy = new RogueLikeEntity(new Color(0, 127, 0), 'T', false, layer: (int)GameMap.Layer.Monsters);
+            return enemy;
+        }
+
+        // public static RogueLikeEntity Enemy()
+        // {
+        //     var enemy = new RogueLikeEntity(Color.Red, 'g', false, layer: (int)GameMap.Layer.Monsters);
+        //
+        //     // Add AI component to path toward player when in view
+        //     enemy.AllComponents.Add(new DemoEnemyAI());
+        //
+        //     return enemy;
+        // }
 
     }
 }
