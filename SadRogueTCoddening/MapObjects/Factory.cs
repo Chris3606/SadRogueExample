@@ -1,6 +1,7 @@
-﻿using SadConsole.Input;
+﻿using System.Collections.Generic;
+using SadConsole;
+using SadConsole.Input;
 using SadRogue.Integration;
-using SadRogue.Integration.FieldOfView.Memory;
 using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
 using SadRogueTCoddening.MapObjects.Components;
@@ -8,6 +9,8 @@ using SadRogueTCoddening.Maps;
 
 namespace SadRogueTCoddening.MapObjects
 {
+    internal readonly record struct TerrainAppearanceDefinition(ColoredGlyph Light, ColoredGlyph Dark);
+    
     /// <summary>
     /// Simple class with some static functions for creating map objects.
     /// </summary>
@@ -16,11 +19,27 @@ namespace SadRogueTCoddening.MapObjects
     /// </remarks>
     internal static class Factory
     {
-        public static MemoryAwareRogueLikeCell Floor(Point position)
-            => new(position, Color.White, Color.Black, '.', (int)GameMap.Layer.Terrain);
+        private static readonly Dictionary<string, TerrainAppearanceDefinition> AppearanceDefinitions = new()
+        {
+            {
+                "Floor", new TerrainAppearanceDefinition(
+                    new ColoredGlyph(Color.White, new Color(200, 180, 50), 0), 
+                    new ColoredGlyph(Color.White, new Color(50, 50, 150), 0)
+                )
+            },
+            {
+                "Wall", new TerrainAppearanceDefinition(
+                    new ColoredGlyph(Color.White, new Color(130, 110, 50), 0), 
+                    new ColoredGlyph(Color.White, new Color(0, 0, 100), 0)
+                )
+            },
+        };
+        
+        public static Terrain Floor(Point position)
+            => new(position, AppearanceDefinitions["Floor"], (int)GameMap.Layer.Terrain);
 
-        public static MemoryAwareRogueLikeCell Wall(Point position)
-            => new(position, Color.White, Color.Black, '#', (int)GameMap.Layer.Terrain, false);
+        public static Terrain Wall(Point position)
+            => new(position, AppearanceDefinitions["Wall"], (int)GameMap.Layer.Terrain, false);
 
         public static RogueLikeEntity Player()
         {

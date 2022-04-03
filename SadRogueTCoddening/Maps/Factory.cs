@@ -2,7 +2,6 @@
 using GoRogue.MapGeneration;
 using GoRogue.MapGeneration.ContextComponents;
 using GoRogue.Random;
-using SadRogue.Integration.FieldOfView.Memory;
 using SadRogue.Primitives;
 using SadRogue.Primitives.GridViews;
 using ShaiRandom.Generators;
@@ -32,7 +31,7 @@ namespace SadRogueTCoddening.Maps
             var map = new GameMap(generator.Context.Width, generator.Context.Height, null);
 
             // Add a component that will implement a character "memory" system.
-            map.AllComponents.Add(new DimmingMemoryFieldOfViewHandler(0.6f));
+            map.AllComponents.Add(new TerrainFOVVisibilityHandler());
 
             // Translate GoRogue's terrain data into actual integration library objects.  Our terrain must be of type
             // MemoryAwareRogueLikeCells because we are using the integration library's "memory-based" fov visibility
