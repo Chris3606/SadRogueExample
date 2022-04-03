@@ -1,6 +1,7 @@
 ﻿using System;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
+using SadRogue.Primitives;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 
@@ -41,13 +42,14 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         int damage = Power - target.Defense;
         string attackDesc = $"{Parent!.Name} attacks {target.Parent!.Name}";
 
+        var atkTextColor = Parent == Engine.Player ? Constants.PlayerAtkTextColor : Constants.EnemyAtkTextColor;
         if (damage > 0)
         {
-            Engine.GameScreen?.MessageLog.AddMessage($"{attackDesc} for {damage} damage.");
+            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor, Color.Transparent));
             target.HP -= damage;
         }
         else
-            Engine.GameScreen?.MessageLog.AddMessage($"{attackDesc} but does no damage.");
+            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} but does no damage.", atkTextColor, Color.Transparent));
     }
 
     public bool OnBumped(RogueLikeEntity source)

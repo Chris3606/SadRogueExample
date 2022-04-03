@@ -47,7 +47,7 @@ internal static class Factory
         // and a 20% chance of being a troll (stronger).
         foreach (var room in rooms.Items)
         {
-            int enemies = GlobalRandom.DefaultRNG.NextInt(1, 3);
+            int enemies = GlobalRandom.DefaultRNG.NextInt(0, 3);
             for (int i = 0; i < enemies; i++)
             {
                 bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);

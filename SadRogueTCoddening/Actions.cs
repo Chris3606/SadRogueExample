@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using GoRogue.GameFramework;
+using SadConsole;
 using SadRogue.Integration;
 using SadRogue.Primitives;
 using SadRogueTCoddening.MapObjects.Components;
@@ -44,7 +45,7 @@ internal static class Actions
     public static void HostileDeath(object? s, EventArgs e)
     {
         var hostile = ((Combatant)s!).Parent!;
-        Engine.GameScreen?.MessageLog.AddMessage($"The {hostile.Name} dies!");
+        Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!", Constants.EnemyDiedTextColor, Color.Transparent));
         
         // Switch entity for corpse
         var map = hostile.CurrentMap!;

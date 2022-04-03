@@ -9,7 +9,7 @@ namespace SadRogueTCoddening.Screens.Surfaces;
 /// </summary>
 public class MessageLogConsole : Console
 {
-    private string _lastMessage;
+    private ColoredString _lastMessage;
     private int _lastMessageCount;
 
     public MessageLogConsole(int width, int height)
@@ -34,12 +34,13 @@ public class MessageLogConsole : Console
     private void Initialize()
     {
         Cursor.AutomaticallyShiftRowsUp = true;
-        _lastMessage = "";
+        _lastMessage = new("");
     }
 
-    public void AddMessage(string message)
+    public void AddMessage(ColoredString message)
     {
-        if (_lastMessage == message)
+        // For now, we'll just blend messages with different colors but same content
+        if (_lastMessage.String == message.String)
             _lastMessageCount++;
         else
         {
@@ -50,7 +51,7 @@ public class MessageLogConsole : Console
         if (_lastMessageCount > 1)
         {
             Cursor.Position = Cursor.Position.Translate(0, -1);
-            Cursor.Print($"{_lastMessage} (x{_lastMessageCount})");
+            Cursor.Print(_lastMessage + " (x" + _lastMessageCount.ToString() + ")");
         }
         else
             Cursor.Print(_lastMessage);
