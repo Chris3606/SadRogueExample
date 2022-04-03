@@ -2,25 +2,24 @@
 using SadRogue.Integration.Maps;
 using SadRogue.Primitives;
 
-namespace SadRogueTCoddening.Maps
+namespace SadRogueTCoddening.Maps;
+
+/// <summary>
+/// Basic game map which determines layers based on a Layer enumeration.
+/// </summary>
+internal class GameMap : RogueLikeMap
 {
     /// <summary>
-    /// Basic game map which determines layers based on a Layer enumeration.
+    /// Map layers for rendering/collision.
     /// </summary>
-    internal class GameMap : RogueLikeMap
+    public enum Layer
     {
-        /// <summary>
-        /// Map layers for rendering/collision.
-        /// </summary>
-        public enum Layer
-        {
-            Terrain = 0,
-            Items,
-            Monsters
-        }
-        
-        public GameMap(int width, int height, DefaultRendererParams? defaultRendererParams)
-            : base(width, height, defaultRendererParams, Enum.GetValues<Layer>().Length - 1, Distance.Chebyshev)
-        { }
+        Terrain = 0,
+        Items,
+        Monsters
     }
+        
+    public GameMap(int width, int height, DefaultRendererParams? defaultRendererParams)
+        : base(width, height, defaultRendererParams, Enum.GetValues<Layer>().Length - 1, Distance.Chebyshev)
+    { }
 }

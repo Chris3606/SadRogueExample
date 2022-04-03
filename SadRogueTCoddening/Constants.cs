@@ -3,7 +3,7 @@
 /// <summary>
 /// A place for default constants (for now)
 /// </summary>
-public class Constants
+internal static class Constants
 {
     // Window width/height
     public const int ScreenWidth = 80;
