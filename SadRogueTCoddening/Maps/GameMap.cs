@@ -15,8 +15,8 @@ namespace SadRogueTCoddening.Maps
         public enum Layer
         {
             Terrain = 0,
-            Monsters,
-            Items
+            Items,
+            Monsters
         }
         
         public GameMap(int width, int height, DefaultRendererParams? defaultRendererParams)

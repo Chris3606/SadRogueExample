@@ -7,7 +7,7 @@ using SadRogueTCoddening.MapObjects.Components;
 using SadRogueTCoddening.Maps;
 using SadRogueTCoddening.Screens;
 
-namespace SadRogueTCoddening.MapObjects;
+namespace SadRogueTCoddening;
 
 internal static class Actions
 {
@@ -49,7 +49,7 @@ internal static class Actions
         // Switch entity for corpse
         var map = hostile.CurrentMap!;
         map.RemoveEntity(hostile);
-        map.AddEntity(Factory.Corpse(hostile));
+        map.AddEntity(MapObjects.Factory.Corpse(hostile));
     }
 
     public static void TakeEnemyTurns(Map map)

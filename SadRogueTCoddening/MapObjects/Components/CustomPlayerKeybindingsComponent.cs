@@ -17,12 +17,12 @@ namespace SadRogueTCoddening.MapObjects.Components
             // If we're waiting a turn, no need to bump anything.
             if (direction != Direction.None)
             {
-                var result = MapObjects.Actions.Bump((RogueLikeEntity)Parent, direction);
+                var result = SadRogueTCoddening.Actions.Bump((RogueLikeEntity)Parent, direction);
                 if (!result) return; // If we didn't do anything, we won't count this as an action.
             }
             
             // Otherwise, we took an action, so end turn
-            MapObjects.Actions.TakeEnemyTurns(Parent.CurrentMap!);
+            SadRogueTCoddening.Actions.TakeEnemyTurns(Parent.CurrentMap!);
         }
     }
 }
