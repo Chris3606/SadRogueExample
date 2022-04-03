@@ -39,7 +39,7 @@ namespace SadRogueTCoddening.MapObjects
             => new(position, AppearanceDefinitions["Floor"], (int)GameMap.Layer.Terrain);
 
         public static Terrain Wall(Point position)
-            => new(position, AppearanceDefinitions["Wall"], (int)GameMap.Layer.Terrain, false);
+            => new(position, AppearanceDefinitions["Wall"], (int)GameMap.Layer.Terrain, false, false);
 
         public static RogueLikeEntity Player()
         {
