@@ -26,8 +26,7 @@ internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
                 return; 
             }
         }
-        
-            
+
         // Otherwise, we took an action, so end turn and let the enemies take theirs (unless the player somehow died
         // on their turn in which case we'll return)
         if (Parent.GoRogueComponents.GetFirst<Combatant>().HP <= 0) return;

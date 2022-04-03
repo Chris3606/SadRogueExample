@@ -19,7 +19,7 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         {
             if (_hp == value) return;
             
-            _hp = Math.Max(0, value);
+            _hp = Math.Min(Math.Max(0, value), MaxHP);
             HPChanged?.Invoke(this, EventArgs.Empty);
             
             if (_hp == 0)
@@ -41,6 +41,14 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         HP = MaxHP = hp;
         Defense = defense;
         Power = power;
+    }
+
+    public int Heal(int amount)
+    {
+        amount = Math.Min(amount, MaxHP - HP);
+        HP += amount;
+
+        return amount;
     }
 
     public void Attack(Combatant target)

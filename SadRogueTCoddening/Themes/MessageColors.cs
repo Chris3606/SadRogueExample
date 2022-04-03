@@ -28,4 +28,9 @@ internal static class MessageColors
     {
         Foreground = new(0x80, 0x80, 0x80)
     };
+    
+    public static readonly ColoredString.ColoredGlyphEffect HealthRecoveredAppearance = new()
+    {
+        Foreground = new(0x0, 0xFF, 0x0)
+    };
 }
