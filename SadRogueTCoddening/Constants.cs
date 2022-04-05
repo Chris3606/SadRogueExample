@@ -7,6 +7,6 @@ internal static class Constants
 {
     // Window width/height
     public const int ScreenWidth = 80;
-    public const int ScreenHeight = 25;
+    public const int ScreenHeight = 50;
 
 }

@@ -13,7 +13,7 @@ internal static class Engine
 
     private static void Main()
     {
-        Game.Create(Constants.ScreenWidth, Constants.ScreenHeight);
+        Game.Create(Constants.ScreenWidth, Constants.ScreenHeight, "Fonts/Cheepicus12.font");
         Game.Instance.OnStart = Init;
         Game.Instance.Run();
         Game.Instance.Dispose();
