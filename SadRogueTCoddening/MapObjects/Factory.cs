@@ -58,7 +58,7 @@ internal static class Factory
         player.AllComponents.Add(motionControl);
 
         // Add component for updating map's player FOV as they move
-        player.AllComponents.Add(new PlayerFOVController());
+        player.AllComponents.Add(new PlayerFOVController{ FOVRadius = 8 });
             
         // Player combatant
         var combatant = new Combatant(30, 2, 5);
