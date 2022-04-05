@@ -2,6 +2,7 @@
 using SadConsole;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
+using SadConsole.UI.Themes;
 using SadRogue.Primitives;
 using SadRogueTCoddening.MapObjects.Components;
 
@@ -16,9 +17,11 @@ internal class StatusPanel : ControlsConsole
     {
         HPBar = new ProgressBar(Width, 1, HorizontalAlignment.Left)
         {
-            DisplayTextColor = Color.White,
-            Theme = Themes.StatusPanel.HPBarTheme
+            DisplayTextColor = Color.White
         };
+        HPBar.SetThemeColors(Themes.StatusPanel.HPBarColors);
+        ((ProgressBarTheme)HPBar.Theme).Background.SetGlyph(' ');
+
         Controls.Add(HPBar);
         Engine.Player.AllComponents.GetFirst<Combatant>().HPChanged += OnPlayerHPChanged;
         UpdateHPBar();

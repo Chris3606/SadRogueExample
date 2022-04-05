@@ -1,22 +1,19 @@
-﻿using SadConsole.UI.Controls;
+﻿using SadConsole.UI;
 using SadConsole.UI.Themes;
-using SadRogue.Primitives;
 
 namespace SadRogueTCoddening.Themes;
 
 internal static class StatusPanel
 {
-    public static readonly ProgressBarTheme HPBarTheme = GetHPBarTheme();
 
-    private static ProgressBarTheme GetHPBarTheme()
+    public static readonly Colors HPBarColors = GetHPBarColors();
+
+    private static Colors GetHPBarColors()
     {
-        // Color setting doesn't work right now, not sure why
-        var theme = (ProgressBarTheme)Library.Default.GetControlTheme(typeof(ProgressBar));
-        theme.Background.SetBackground(Color.Red);
-        theme.Background.SetForeground(Color.Red);
-        theme.Foreground.SetBackground(Color.Green);
-        theme.Foreground.SetForeground(Color.Green);
+        var colors = Library.Default.Colors.Clone();
+        colors.Appearance_ControlNormal.Foreground = new (0x0, 0x60, 0x0);
+        colors.Appearance_ControlNormal.Background = new (0x40, 0x10, 0x10);
 
-        return theme;
+        return colors;
     }
 }
