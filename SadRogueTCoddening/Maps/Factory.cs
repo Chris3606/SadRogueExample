@@ -12,10 +12,14 @@ namespace SadRogueTCoddening.Maps;
 /// Basic factory which produces different types of maps.
 /// </summary>
 /// <remarks>
-/// TODO: Better integrate into GoRogue map gen, and convert to use GoRogue.Factories.
+/// The map gen below won't use GoRogue's map generation system for the custom parts, although we could; it simply isn't
+/// necessary for the relatively simple, single type of map we have below.
 /// </remarks>
 internal static class Factory
 {
+    private const int MaxMonstersPerRoom = 2;
+    private const int MaxPotionsPerRoom = 2;
+    
     public static GameMap Dungeon()
     {
         // Generate a dungeon maze map
@@ -24,30 +28,42 @@ internal static class Factory
             {
                 gen.AddSteps(DefaultAlgorithms.DungeonMazeMapSteps(minRooms: 20, maxRooms: 30, roomMinSize: 8, roomMaxSize: 12, saveDeadEndChance: 0));
             });
-
+        
+        // Extract components from the map GoRogue generated which hold basic information about the map
         var generatedMap = generator.Context.GetFirst<ISettableGridView<bool>>("WallFloor");
+        var rooms = generator.Context.GetFirst<ItemList<Rectangle>>("Rooms");
 
-        // Create actual integration library map.
+        // Create actual integration library map with a proper component for the character "memory" system.
         var map = new GameMap(generator.Context.Width, generator.Context.Height, null);
-
-        // Add a component that will implement a character "memory" system.
         map.AllComponents.Add(new TerrainFOVVisibilityHandler());
 
-        // Translate GoRogue's terrain data into actual integration library objects.  Our terrain must be of type
-        // MemoryAwareRogueLikeCells because we are using the integration library's "memory-based" fov visibility
-        // system.
+        // Translate GoRogue's terrain data into actual integration library objects.
         map.ApplyTerrainOverlay(generatedMap, (pos, val) => val ? MapObjects.Factory.Floor(pos) : MapObjects.Factory.Wall(pos));
+        
+        // Spawn player
+        SpawnPlayer(map, rooms);
+        
+        // Spawn enemies/items/etc
+        SpawnMonsters(map, rooms);
+        SpawnPotions(map, rooms);
 
+        return map;
+    }
+
+    private static void SpawnPlayer(GameMap map, ItemList<Rectangle> rooms)
+    {
         // Add player to map at the center of the first room we placed
-        var rooms = generator.Context.GetFirst<ItemList<Rectangle>>("Rooms");
         Engine.Player.Position = rooms.Items[0].Center;
         map.AddEntity(Engine.Player);
-            
-        // Generate between zero and two monsters per room.  Each monster has an 80% chance of being an orc (weaker)
+    }
+
+    private static void SpawnMonsters(GameMap map, ItemList<Rectangle> rooms)
+    {
+        // Generate between zero and the max monsters per room.  Each monster has an 80% chance of being an orc (weaker)
         // and a 20% chance of being a troll (stronger).
         foreach (var room in rooms.Items)
         {
-            int enemies = GlobalRandom.DefaultRNG.NextInt(0, 3);
+            int enemies = GlobalRandom.DefaultRNG.NextInt(0, MaxMonstersPerRoom + 1);
             for (int i = 0; i < enemies; i++)
             {
                 bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
@@ -57,8 +73,21 @@ internal static class Factory
                 map.AddEntity(enemy);
             }
         }
-
-        return map;
+    }
+    
+    private static void SpawnPotions(GameMap map, ItemList<Rectangle> rooms)
+    {
+        // Generate between zero and the max potions per room.
+        foreach (var room in rooms.Items)
+        {
+            int potions = GlobalRandom.DefaultRNG.NextInt(0, MaxPotionsPerRoom + 1);
+            for (int i = 0; i < potions; i++)
+            {
+                var potion = MapObjects.Items.Factory.HealthPotion();
+                potion.Position = RandomPositionFromRect(GlobalRandom.DefaultRNG, room, pos => map.WalkabilityView[pos]);
+                map.AddEntity(potion);
+            }
+        }
     }
 
     private static Point RandomPositionFromRect(IEnhancedRandom rng, Rectangle rect, Func<Point, bool> selector)

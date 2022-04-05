@@ -14,9 +14,6 @@ internal readonly record struct TerrainAppearanceDefinition(ColoredGlyph Light, 
 /// <summary>
 /// Simple class with some static functions for creating map objects.
 /// </summary>
-/// <remarks>
-/// TODO: Port to GoRogue's factory system.
-/// </remarks>
 internal static class Factory
 {
     private static readonly Dictionary<string, TerrainAppearanceDefinition> AppearanceDefinitions = new()
