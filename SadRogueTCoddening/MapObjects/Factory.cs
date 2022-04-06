@@ -6,6 +6,7 @@ using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
 using SadRogueTCoddening.MapObjects.Components;
 using SadRogueTCoddening.Maps;
+using SadRogueTCoddening.Screens.MainGameMenus;
 
 namespace SadRogueTCoddening.MapObjects;
 
@@ -53,14 +54,21 @@ internal static class Factory
         motionControl.SetMotion(Keys.NumPad5, Direction.None);
         motionControl.SetMotion(Keys.OemPeriod, Direction.None);
         player.AllComponents.Add(motionControl);
+        
+        // Add controls for picking up items and getting to inventory screen.
+        motionControl.SetAction(Keys.G, () => Actions.PickUpItem(player));
+        motionControl.SetAction(Keys.C, () => Game.Instance.Screen.Children.Add(new ConsumableSelect()));
 
         // Add component for updating map's player FOV as they move
         player.AllComponents.Add(new PlayerFOVController{ FOVRadius = 8 });
-            
+
         // Player combatant
         var combatant = new Combatant(30, 2, 5);
         combatant.Died += Actions.PlayerDeath;
         player.AllComponents.Add(combatant);
+        
+        // Player inventory
+        player.AllComponents.Add(new Inventory(26));
 
         return player;
     }

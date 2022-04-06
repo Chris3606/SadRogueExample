@@ -5,6 +5,7 @@ using SadConsole;
 using SadRogue.Integration;
 using SadRogue.Primitives;
 using SadRogueTCoddening.MapObjects.Components;
+using SadRogueTCoddening.MapObjects.Components.Items;
 using SadRogueTCoddening.Maps;
 using SadRogueTCoddening.Screens;
 using SadRogueTCoddening.Themes;
@@ -35,10 +36,38 @@ internal static class Actions
         return false;
     }
 
+    public static void PickUpItem(RogueLikeEntity entity)
+    {
+        if (entity.CurrentMap == null)
+            throw new ArgumentException("Entity must be part of a map to pick up items.", nameof(entity));
+        
+        var inventory = entity.AllComponents.GetFirst<Inventory>();
+        foreach (var item in entity.CurrentMap.GetEntitiesAt<RogueLikeEntity>(entity.Position))
+        {
+            if (!item.GoRogueComponents.Contains<ICarryable>()) continue;
+
+            if (inventory.Items.Count >= inventory.Capacity)
+            {
+                // TODO: Color
+                Engine.GameScreen?.MessageLog.AddMessage(new("Your inventory is full."));
+                return;
+            }
+            
+            item.CurrentMap!.RemoveEntity(item);
+            inventory.Items.Add(item);
+            
+            // TODO: Pick a color
+            Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}."));
+            return;
+        }
+        
+        Engine.GameScreen?.MessageLog.AddMessage(new("There is nothing here to pick up.", MessageColors.ImpossibleActionAppearance));
+    }
+
     public static void PlayerDeath(object? s, EventArgs e)
     {
         // Go back to main menu for now
-        SadConsole.Game.Instance.Screen = new MainMenu();
+        Game.Instance.Screen = new MainMenu();
         
     }
 
