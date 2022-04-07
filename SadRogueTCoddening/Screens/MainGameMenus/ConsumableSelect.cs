@@ -1,11 +1,20 @@
-﻿using SadConsole;
+﻿using Microsoft.Toolkit.HighPerformance.Enumerables;
 using SadConsole.UI.Controls;
-using SadRogue.Primitives;
+using SadRogue.Integration;
 using SadRogueTCoddening.MapObjects.Components;
 using SadRogueTCoddening.MapObjects.Components.Items;
 
 namespace SadRogueTCoddening.Screens.MainGameMenus;
 
+internal class ListItem
+{
+    public RogueLikeEntity Item { get; init; }
+
+    public override string ToString()
+    {
+        return Item.Name;
+    }
+}
 internal class ConsumableSelect : MainGameMenu
 {
     private Inventory _playerInventory;
@@ -13,21 +22,17 @@ internal class ConsumableSelect : MainGameMenu
     public ConsumableSelect()
         : base(51, 15)
     {
-        Position = new Point(Constants.ScreenWidth / 2, Constants.ScreenHeight / 2) - new Point(Width / 2, Height / 2);
-        
+        Title = "Select an item to consume:";
+
         _playerInventory = Engine.Player.AllComponents.GetFirst<Inventory>();
         if (_playerInventory.Items.Count == 0)
         {
-            Surface.Print(0, Height / 2, "There are no items in your inventory.");
+            PrintTextAtCenter("There are no items in your inventory.");
             return;
         }
         
-        Surface.Print(0, 0, "Select an item to consume:");
         bool foundItem = false;
-        var list = new ListBox(Width, Height - 1)
-        {
-            Position = (0, 1)
-        };
+        var list = new ListBox(Width - 2, Height - 2) { Position = (1, 1), SingleClickItemExecute = true };
         
         foreach (var item in _playerInventory.Items)
         {
@@ -35,12 +40,26 @@ internal class ConsumableSelect : MainGameMenu
             if (consumable == null) continue;
         
             foundItem = true;
-            list.Items.Add(item.Name);
+            list.Items.Add(new ListItem{Item = item});
         }
         
         if (!foundItem)
-            Surface.Print(0, Height / 2, "There are no consumable items in your inventory.");
+            PrintTextAtCenter("There are no consumable items in your inventory.");
         else
             Controls.Add(list);
+        
+        list.SelectedItemExecuted += OnItemSelected;
+    }
+
+    private void OnItemSelected(object? sender, ListBox.SelectedItemEventArgs e)
+    {
+        var item = ((ListItem)e.Item).Item;
+
+        var consumable = item.AllComponents.GetFirst<IConsumable>();
+        consumable.Consume(Engine.Player);
+        _playerInventory.Items.Remove(item);
+
+        Hide();
+        Actions.TakeEnemyTurns(Engine.Player.CurrentMap!);
     }
 }

@@ -58,6 +58,7 @@ internal static class Actions
             
             // TODO: Pick a color
             Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}."));
+            TakeEnemyTurns(Engine.Player.CurrentMap!);
             return;
         }
         

@@ -1,37 +1,32 @@
-﻿using SadConsole;
-using SadConsole.Input;
+﻿using System;
 using SadConsole.UI;
+using SadRogue.Primitives;
 
 namespace SadRogueTCoddening.Screens.MainGameMenus;
 
 /// <summary>
-/// A ControlsConsole that can be used as a modal menu over the game screen by adding it as a child to the MainGameScreen.
+/// A Window that can be used as a modal menu over the game screen by adding it as a child to the MainGameScreen.
 /// </summary>
-internal class MainGameMenu : ControlsConsole
+internal class MainGameMenu : Window
 {
-    private IScreenObject _focused;
-    
     public MainGameMenu(int width, int height)
         : base(width, height)
     {
-        _focused = Game.Instance.FocusedScreenObjects.ScreenObject;
-        IsFocused = true;
-    }
-    
-    public override bool ProcessKeyboard(Keyboard keyboard)
-    {
-        if (keyboard.IsKeyPressed(Keys.Escape))
-        {
-            CloseWindow();
-            return true;
-        }
+        CloseOnEscKey = true;
+        IsModalDefault = true;
         
-        return base.ProcessKeyboard(keyboard);
+        Center();
+        Show();
     }
 
-    private void CloseWindow()
+    protected void PrintTextAtCenter(string text)
     {
-        _focused.IsFocused = true;
-        Parent.Children.Remove(this);
+        int effectiveWidth = Width - 2;
+        if (text.Length > effectiveWidth)
+            throw new ArgumentException("Message too long to print.");
+
+        var pos = new Point(effectiveWidth / 2 - text.Length / 2 + 1, (Height - 2) / 2 + 1);
+        Cursor.Move(pos);
+        Cursor.Print(text);
     }
 }
