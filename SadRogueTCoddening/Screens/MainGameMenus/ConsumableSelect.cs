@@ -54,12 +54,12 @@ internal class ConsumableSelect : MainGameMenu
     private void OnItemSelected(object? sender, ListBox.SelectedItemEventArgs e)
     {
         var item = ((ListItem)e.Item).Item;
-
-        var consumable = item.AllComponents.GetFirst<IConsumable>();
-        consumable.Consume(Engine.Player);
-        _playerInventory.Items.Remove(item);
-
+        
+        bool result = _playerInventory.Consume(item);
+        
         Hide();
-        Actions.TakeEnemyTurns(Engine.Player.CurrentMap!);
+        
+        if (result)
+            Actions.TakeEnemyTurns(Engine.Player.CurrentMap!);
     }
 }

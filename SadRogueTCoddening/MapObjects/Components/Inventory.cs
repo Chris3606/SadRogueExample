@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
+using SadRogueTCoddening.MapObjects.Components.Items;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 
@@ -35,5 +36,22 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
 
         // TODO: Pick a color, any color!
         Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}."));
+    }
+
+    public bool Consume(RogueLikeEntity item)
+    {
+        if (Parent == null)
+            throw new InvalidOperationException("Cannot consume item from an inventory not attached to an object.");
+        var consumable = item.AllComponents.GetFirst<IConsumable>();
+        
+        int idx = Items.FindIndex(i => i == item);
+        if (idx == -1)
+            throw new ArgumentException("Tried to consume a consumable that was not in the inventory.");
+
+        bool result = consumable.Consume(Parent);
+        if (!result) return false;
+        
+        Items.RemoveAt(idx);
+        return true;
     }
 }
