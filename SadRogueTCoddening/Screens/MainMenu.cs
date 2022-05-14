@@ -6,6 +6,9 @@ using SadRogueTCoddening.MapObjects.Components;
 
 namespace SadRogueTCoddening.Screens;
 
+/// <summary>
+/// The main menu screen.
+/// </summary>
 public class MainMenu : ControlsConsole
 {
     public MainMenu()

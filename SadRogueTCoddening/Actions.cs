@@ -12,9 +12,23 @@ using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening;
 
+/// <summary>
+/// Static class with functions which has functions for various "actions" and event handlers related to state management.
+/// </summary>
 internal static class Actions
 {
-    public static bool Bump(RogueLikeEntity entity, Direction direction)
+    /// <summary>
+    /// Causes the entity specified to move in the specified direction if it can, or generate a "bump" action in that direction if a move is not possible.
+    /// </summary>
+    /// <remarks>
+    /// If the entity cannot move, any map objects which have components implementing IBumpable will get their "Bump" function called, with the given
+    /// entity being used as the source.  All components on all entities at the position being bumped will have their "Bump" function called
+    /// in sequence, until one of them returns "true".
+    /// </remarks>
+    /// <param name="entity">The entity performing the bump.</param>
+    /// <param name="direction">The direction of the adjacent square the specified entity is moving/bumping in.</param>
+    /// <returns>True if either the entity moves, or some component's "Bump" function returned true; false otherwise.</returns>
+    public static bool MoveOrBump(RogueLikeEntity entity, Direction direction)
     {
         if (entity.CurrentMap == null) return false;
 
@@ -36,6 +50,11 @@ internal static class Actions
         return false;
     }
 
+    /// <summary>
+    /// Causes the given entity to pick up any items at its current position.  The given entity must have an inventory.
+    /// </summary>
+    /// <param name="entity">Entity which will pick up items.</param>
+    /// <exception cref="ArgumentException"></exception>
     public static void PickUpItem(RogueLikeEntity entity)
     {
         if (entity.CurrentMap == null)
@@ -48,16 +67,15 @@ internal static class Actions
 
             if (inventory.Items.Count >= inventory.Capacity)
             {
-                // TODO: Color
-                Engine.GameScreen?.MessageLog.AddMessage(new("Your inventory is full."));
+                Engine.GameScreen?.MessageLog.AddMessage(new("Your inventory is full.", MessageColors.ImpossibleActionAppearance));
                 return;
             }
             
             item.CurrentMap!.RemoveEntity(item);
             inventory.Items.Add(item);
             
-            // TODO: Pick a color
-            Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}."));
+            Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}.", MessageColors.ItemPickedUpAppearance));
+            // TODO: Not great place for this
             TakeEnemyTurns(Engine.Player.CurrentMap!);
             return;
         }
@@ -65,6 +83,9 @@ internal static class Actions
         Engine.GameScreen?.MessageLog.AddMessage(new("There is nothing here to pick up.", MessageColors.ImpossibleActionAppearance));
     }
 
+    /// <summary>
+    /// Called when the player dies.
+    /// </summary>
     public static void PlayerDeath(object? s, EventArgs e)
     {
         // Go back to main menu for now
@@ -72,7 +93,9 @@ internal static class Actions
         
     }
 
-    // Creates a corpse of the given object
+    /// <summary>
+    /// Called when enemies die.
+    /// </summary>
     public static void HostileDeath(object? s, EventArgs e)
     {
         var hostile = ((Combatant)s!).Parent!;

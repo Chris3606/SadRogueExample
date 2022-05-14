@@ -6,7 +6,7 @@ using SadRogueTCoddening.Maps;
 namespace SadRogueTCoddening.MapObjects.Items;
 
 /// <summary>
-/// Factory for items.
+/// Simple class with some static functions for creating items.
 /// </summary>
 internal static class Factory
 {

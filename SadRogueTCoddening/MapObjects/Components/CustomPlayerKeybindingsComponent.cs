@@ -18,7 +18,7 @@ internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
         // If we're waiting a turn, no need to bump anything.
         if (direction != Direction.None)
         {
-            var result = SadRogueTCoddening.Actions.Bump((RogueLikeEntity)Parent, direction);
+            var result = SadRogueTCoddening.Actions.MoveOrBump((RogueLikeEntity)Parent, direction);
             // If we didn't do anything, we won't count this as an action.
             if (!result)
             {

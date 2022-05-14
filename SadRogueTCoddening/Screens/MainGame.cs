@@ -14,6 +14,9 @@ internal class MainGame : ScreenObject
     public readonly MessageLogConsole MessageLog;
     public readonly Surfaces.StatusPanel StatusPanel;
     
+    /// <summary>
+    /// Component which locks the map's view onto an entity (usually the player).
+    /// </summary>
     public readonly SadConsole.Components.SurfaceComponentFollowTarget ViewLock;
 
     private const int StatusBarWidth = 20;

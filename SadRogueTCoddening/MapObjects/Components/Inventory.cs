@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogueTCoddening.MapObjects.Components.Items;
+using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 
+/// <summary>
+/// Component representing an inventory which can hold a given number of items.
+/// </summary>
 internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
 {
     public int Capacity { get; }
@@ -34,8 +38,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         item.Position = Parent.Position;
         Parent.CurrentMap.AddEntity(item);
 
-        // TODO: Pick a color, any color!
-        Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}."));
+        Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}.", MessageColors.ItemDroppedAppearance));
     }
 
     public bool Consume(RogueLikeEntity item)

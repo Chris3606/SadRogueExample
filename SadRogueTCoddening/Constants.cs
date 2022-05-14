@@ -1,7 +1,7 @@
 ﻿namespace SadRogueTCoddening;
 
 /// <summary>
-/// A place for default constants (for now)
+/// Static class containing global constants that don't have another sensible place.
 /// </summary>
 internal static class Constants
 {

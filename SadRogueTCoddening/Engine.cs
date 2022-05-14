@@ -4,6 +4,9 @@ using SadRogueTCoddening.Screens;
 
 namespace SadRogueTCoddening;
 
+/// <summary>
+/// Main class containing the program's entry point, which runs the game's core loop.
+/// </summary>
 internal static class Engine
 {
     public static MainGame? GameScreen;

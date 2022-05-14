@@ -3,7 +3,7 @@
 namespace SadRogueTCoddening.MapObjects.Components;
 
 /// <summary>
-/// Interface implemented by anything that reacts to bumps.
+/// Interface implemented by any components that react to bumps.
 /// </summary>
 public interface IBumpable
 {

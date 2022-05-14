@@ -17,6 +17,10 @@ internal readonly record struct TerrainAppearanceDefinition(ColoredGlyph Light, 
 /// </summary>
 internal static class Factory
 {
+    /// <summary>
+    /// Appearance definitions for various types of terrain objects.  It defines both their normal color, and their
+    /// "explored but out of FOV" color.
+    /// </summary>
     private static readonly Dictionary<string, TerrainAppearanceDefinition> AppearanceDefinitions = new()
     {
         {

@@ -1,5 +1,4 @@
-﻿using Microsoft.Toolkit.HighPerformance.Enumerables;
-using SadConsole.UI.Controls;
+﻿using SadConsole.UI.Controls;
 using SadRogue.Integration;
 using SadRogueTCoddening.MapObjects.Components;
 using SadRogueTCoddening.MapObjects.Components.Items;
@@ -8,7 +7,7 @@ namespace SadRogueTCoddening.Screens.MainGameMenus;
 
 internal class ListItem
 {
-    public RogueLikeEntity Item { get; init; }
+    public RogueLikeEntity Item { get; init; } = null!;
 
     public override string ToString()
     {
