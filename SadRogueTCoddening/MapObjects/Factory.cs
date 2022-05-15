@@ -60,7 +60,7 @@ internal static class Factory
         player.AllComponents.Add(motionControl);
         
         // Add controls for picking up items and getting to inventory screen.
-        motionControl.SetAction(Keys.G, () => Actions.PickUpItem(player));
+        motionControl.SetAction(Keys.G, () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
         motionControl.SetAction(Keys.C, () => Game.Instance.Screen.Children.Add(new ConsumableSelect()));
 
         // Add component for updating map's player FOV as they move
@@ -68,7 +68,7 @@ internal static class Factory
 
         // Player combatant
         var combatant = new Combatant(30, 2, 5);
-        combatant.Died += Actions.PlayerDeath;
+        combatant.Died += Engine.PlayerDeath;
         player.AllComponents.Add(combatant);
         
         // Player inventory
@@ -88,7 +88,7 @@ internal static class Factory
         enemy.AllComponents.Add(new HostileAI());
 
         var combatant = new Combatant(10, 0, 3);
-        combatant.Died += Actions.HostileDeath;
+        combatant.Died += Engine.HostileDeath;
         enemy.AllComponents.Add(combatant);
             
         return enemy;
@@ -104,7 +104,7 @@ internal static class Factory
         enemy.AllComponents.Add(new HostileAI());
 
         var combatant = new Combatant(16, 1, 4);
-        combatant.Died += Actions.HostileDeath;
+        combatant.Died += Engine.HostileDeath;
         enemy.AllComponents.Add(combatant);
 
         return enemy;

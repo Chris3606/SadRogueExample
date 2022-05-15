@@ -20,13 +20,15 @@ internal class HealingConsumable : RogueLikeComponentBase<RogueLikeEntity>, ICon
         var amountRecovered = combatant.Heal(Amount);
         if (amountRecovered > 0)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new(
-                $"You consume the {Parent!.Name}, and recover {amountRecovered} HP!",
-                MessageColors.HealthRecoveredAppearance));
+            if (consumer == Engine.Player)
+                Engine.GameScreen?.MessageLog.AddMessage(new(
+                    $"You consume the {Parent!.Name}, and recover {amountRecovered} HP!",
+                    MessageColors.HealthRecoveredAppearance));
             return true;
         }
         
-        Engine.GameScreen?.MessageLog.AddMessage(new("Your health is already full.", MessageColors.ImpossibleActionAppearance));
+        if (consumer == Engine.Player)
+            Engine.GameScreen?.MessageLog.AddMessage(new("Your health is already full.", MessageColors.ImpossibleActionAppearance));
         return true;
     }
 }

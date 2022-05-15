@@ -15,22 +15,10 @@ internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
     {
         if (Parent == null) return;
 
-        // If we're waiting a turn, no need to bump anything.
-        if (direction != Direction.None)
-        {
-            var result = SadRogueTCoddening.Actions.MoveOrBump((RogueLikeEntity)Parent, direction);
-            // If we didn't do anything, we won't count this as an action.
-            if (!result)
-            {
-                Engine.GameScreen?.MessageLog.AddMessage(new ("That way is blocked.", MessageColors.ImpossibleActionAppearance));
-                return; 
-            }
-        }
-
-        // Otherwise, we took an action, so end turn and let the enemies take theirs (unless the player somehow died
-        // on their turn in which case we'll return)
-        if (Parent.GoRogueComponents.GetFirst<Combatant>().HP <= 0) return;
-        
-        SadRogueTCoddening.Actions.TakeEnemyTurns(Parent.CurrentMap!);
+        // If we're waiting a turn, there's nothing to do; it's always a valid turn to wait
+        if (direction == Direction.None)
+            PlayerActionHelper.PlayerTakeAction(_ => true);
+        else
+            PlayerActionHelper.PlayerTakeAction(Engine.MoveOrBump, direction);
     }
 }

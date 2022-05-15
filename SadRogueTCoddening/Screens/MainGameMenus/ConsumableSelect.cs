@@ -16,7 +16,7 @@ internal class ListItem
 }
 internal class ConsumableSelect : MainGameMenu
 {
-    private Inventory _playerInventory;
+    private readonly Inventory _playerInventory;
     
     public ConsumableSelect()
         : base(51, 15)
@@ -52,13 +52,10 @@ internal class ConsumableSelect : MainGameMenu
 
     private void OnItemSelected(object? sender, ListBox.SelectedItemEventArgs e)
     {
-        var item = ((ListItem)e.Item).Item;
-        
-        bool result = _playerInventory.Consume(item);
-        
         Hide();
-        
-        if (result)
-            Actions.TakeEnemyTurns(Engine.Player.CurrentMap!);
+
+        var item = ((ListItem)e.Item).Item;
+
+        PlayerActionHelper.PlayerTakeAction(_ => _playerInventory.Consume(item));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using SadConsole.Entities;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogueTCoddening.MapObjects.Components.Items;
@@ -38,7 +39,52 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         item.Position = Parent.Position;
         Parent.CurrentMap.AddEntity(item);
 
-        Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}.", MessageColors.ItemDroppedAppearance));
+        if (Parent == Engine.Player)
+            Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}.", MessageColors.ItemDroppedAppearance));
+    }
+
+    /// <summary>
+    /// Tries to pick up the first item found at the Parent's location.
+    /// </summary>
+    /// <returns>True if an item was picked up; false otherwise.</returns>
+    public bool PickUp()
+    {
+        if (Parent == null)
+            throw new InvalidOperationException(
+                "Can't pick up an item into an inventory that's not connected to an object.");
+
+        if (Parent.CurrentMap == null)
+            throw new InvalidOperationException("Entity must be part of a map to pick up items.");
+
+        var isPlayer = Parent == Engine.Player;
+
+        var inventory = Parent.AllComponents.GetFirst<Inventory>();
+        foreach (var item in Parent.CurrentMap.GetEntitiesAt<RogueLikeEntity>(Parent.Position))
+        {
+            if (!item.AllComponents.Contains<ICarryable>()) continue;
+
+            if (inventory.Items.Count >= inventory.Capacity)
+            {
+                if (isPlayer)
+                    Engine.GameScreen?.MessageLog.AddMessage(new("Your inventory is full.",
+                        MessageColors.ImpossibleActionAppearance));
+                return false;
+            }
+
+            item.CurrentMap!.RemoveEntity(item);
+            inventory.Items.Add(item);
+
+            if (isPlayer)
+                Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}.",
+                    MessageColors.ItemPickedUpAppearance));
+
+            // TODO: Not great place for this
+            //TakeEnemyTurns(Engine.Player.CurrentMap!);
+            return true;
+        }
+        if (isPlayer)
+            Engine.GameScreen?.MessageLog.AddMessage(new("There is nothing here to pick up.", MessageColors.ImpossibleActionAppearance));
+        return false;
     }
 
     public bool Consume(RogueLikeEntity item)

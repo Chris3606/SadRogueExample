@@ -39,10 +39,12 @@ internal class MainGame : ScreenObject
         Map.DefaultRenderer?.SadComponents.Add(ViewLock);
 
         // Create message log
-        MessageLog = new MessageLogConsole(Constants.ScreenWidth - StatusBarWidth - 1, BottomPanelHeight);
-        MessageLog.Parent = this;
-        MessageLog.Position = new(StatusBarWidth + 1, Constants.ScreenHeight - BottomPanelHeight);
-        
+        MessageLog = new MessageLogConsole(Constants.ScreenWidth - StatusBarWidth - 1, BottomPanelHeight)
+        {
+            Parent = this,
+            Position = new(StatusBarWidth + 1, Constants.ScreenHeight - BottomPanelHeight)
+        };
+
         // Create status panel
         StatusPanel = new (StatusBarWidth, BottomPanelHeight);
         StatusPanel.Parent = this;

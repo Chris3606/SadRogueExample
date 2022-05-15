@@ -25,6 +25,6 @@ internal class HostileAI : RogueLikeComponentBase<RogueLikeEntity>
         var path = Parent.CurrentMap.AStar.ShortestPath(Parent.Position, Engine.Player.Position);
         if (path == null) return;
         var firstPoint = path.GetStep(0);
-        Actions.MoveOrBump(Parent, Direction.GetDirection(firstPoint - Parent.Position));
+        Engine.MoveOrBump(Parent, Direction.GetDirection(firstPoint - Parent.Position));
     }
 }
