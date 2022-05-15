@@ -1,2 +1,2 @@
-# SadRogueTCoddening
-An example game using TheSadRogue.Integration, based on the example game used in the Python Libtcod tutorial.
+# SadRogueExample
+An example game using TheSadRogue.Integration, based loosely on the example game used in the Python Libtcod tutorial.
