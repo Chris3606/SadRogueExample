@@ -9,6 +9,10 @@ namespace SadRogueTCoddening;
 /// </summary>
 internal static class Engine
 {
+    // Window width/height
+    public const int ScreenWidth = 80;
+    public const int ScreenHeight = 50;
+
     public static MainGame? GameScreen;
         
     // Null override because it's initialized via new-game/load game
@@ -16,7 +20,7 @@ internal static class Engine
 
     private static void Main()
     {
-        Game.Create(Constants.ScreenWidth, Constants.ScreenHeight, "Fonts/Cheepicus12.font");
+        Game.Create(ScreenWidth, ScreenHeight, "Fonts/Cheepicus12.font");
         Game.Instance.OnStart = Init;
         Game.Instance.Run();
         Game.Instance.Dispose();

@@ -16,7 +16,7 @@ public class MainMenu : ControlsConsole
         : base(15, 3)
     {
         // Position controls console
-        Position = (Constants.ScreenWidth / 2 - Width / 2, Constants.ScreenHeight / 2 - Height / 2);
+        Position = (Engine.ScreenWidth / 2 - Width / 2, Engine.ScreenHeight / 2 - Height / 2);
         
         // Add buttons
         var newGame = new Button(Width)

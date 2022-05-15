@@ -32,7 +32,7 @@ internal class MainGame : ScreenObject
         Map = map;
 
         // Create a renderer for the map, specifying viewport size.
-        Map.DefaultRenderer = Map.CreateRenderer((Constants.ScreenWidth, Constants.ScreenHeight - BottomPanelHeight));
+        Map.DefaultRenderer = Map.CreateRenderer((Engine.ScreenWidth, Engine.ScreenHeight - BottomPanelHeight));
 
         // Make the Map (which is also a screen object) a child of this screen, and ensure it receives focus.
         Map.Parent = this;
@@ -43,16 +43,16 @@ internal class MainGame : ScreenObject
         Map.DefaultRenderer?.SadComponents.Add(ViewLock);
 
         // Create message log
-        MessageLog = new MessageLogConsole(Constants.ScreenWidth - StatusBarWidth - 1, BottomPanelHeight)
+        MessageLog = new MessageLogConsole(Engine.ScreenWidth - StatusBarWidth - 1, BottomPanelHeight)
         {
             Parent = this,
-            Position = new(StatusBarWidth + 1, Constants.ScreenHeight - BottomPanelHeight)
+            Position = new(StatusBarWidth + 1, Engine.ScreenHeight - BottomPanelHeight)
         };
 
         // Create status panel
         StatusPanel = new (StatusBarWidth, BottomPanelHeight);
         StatusPanel.Parent = this;
-        StatusPanel.Position = new(0, Constants.ScreenHeight - BottomPanelHeight);
+        StatusPanel.Position = new(0, Engine.ScreenHeight - BottomPanelHeight);
 
         // Add player death handler
         Engine.Player.AllComponents.GetFirst<Combatant>().Died += PlayerDeath;
