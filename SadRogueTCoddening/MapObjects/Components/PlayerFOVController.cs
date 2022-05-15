@@ -9,8 +9,7 @@ namespace SadRogueTCoddening.MapObjects.Components;
 
 /// <summary>
 /// Component that you can attach to your player object to ensure that it re-calculates the map's FOV whenever the
-/// object is moved.  This could be also be achieved via a subclass of RogueLikeEntity; however the integration library
-/// makes it quick and easy to create custom components that function in both SadConsole's and GoRogue's component systems.
+/// object is moved.
 /// </summary>
 internal class PlayerFOVController : RogueLikeComponentBase<RogueLikeEntity>
 {

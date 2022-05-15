@@ -5,6 +5,9 @@ using SadRogueTCoddening.MapObjects.Components.Items;
 
 namespace SadRogueTCoddening.Screens.MainGameMenus;
 
+/// <summary>
+/// A wrapper around a RogueLikeEntity, which ensures that when it is displayed in a menu, it is displayed as its Name field.
+/// </summary>
 internal class ListItem
 {
     public RogueLikeEntity Item { get; init; } = null!;
@@ -14,6 +17,10 @@ internal class ListItem
         return Item.Name;
     }
 }
+
+/// <summary>
+/// Menu used by the player to select a consumable from their inventory to use.
+/// </summary>
 internal class ConsumableSelect : MainGameMenu
 {
     private readonly Inventory _playerInventory;
@@ -30,6 +37,7 @@ internal class ConsumableSelect : MainGameMenu
             return;
         }
         
+        // Find any consumable items and add them to a ListBox
         bool foundItem = false;
         var list = new ListBox(Width - 2, Height - 2) { Position = (1, 1), SingleClickItemExecute = true };
         
@@ -47,6 +55,7 @@ internal class ConsumableSelect : MainGameMenu
         else
             Controls.Add(list);
         
+        // Handle when an item is selected by using it.
         list.SelectedItemExecuted += OnItemSelected;
     }
 
@@ -55,7 +64,6 @@ internal class ConsumableSelect : MainGameMenu
         Hide();
 
         var item = ((ListItem)e.Item).Item;
-
         PlayerActionHelper.PlayerTakeAction(_ => _playerInventory.Consume(item));
     }
 }

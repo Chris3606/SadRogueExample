@@ -9,7 +9,7 @@ using SadRogueTCoddening.MapObjects.Components;
 namespace SadRogueTCoddening.Screens.Surfaces;
 
 /// <summary>
-/// A ControlsConsole subclass which resides on the main game screen and displays the player's health, etc.
+/// A ControlsConsole subclass which resides on the main game screen and displays the player's health and similar "hud" statistics.
 /// </summary>
 internal class StatusPanel : ControlsConsole
 {

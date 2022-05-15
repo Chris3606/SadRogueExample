@@ -5,8 +5,7 @@ using SadRogueTCoddening.Maps;
 namespace SadRogueTCoddening.MapObjects.Components;
 
 /// <summary>
-/// Subclass of the integration library's keybindings component that moves enemies as appropriate when the player
-/// moves.
+/// Subclass of the integration library's keybindings component that ensures the player's movements count as the player's turn when successful.
 /// </summary>
 internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
 {

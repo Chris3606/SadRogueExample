@@ -6,6 +6,9 @@ using SadRogue.Primitives;
 
 namespace SadRogueTCoddening.MapObjects;
 
+/// <summary>
+/// A MemoryAwareRogueLikeCell class used to represent all terrain objects.  Implements fields necessary for our FOV darkening method.
+/// </summary>
 internal class Terrain : MemoryAwareRogueLikeCell
 {
     public ColoredGlyph DarkAppearance { get; }

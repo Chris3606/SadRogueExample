@@ -7,9 +7,11 @@ using SadRogueTCoddening.Maps;
 namespace SadRogueTCoddening.MapObjects.Components;
 
 /// <summary>
-/// Simple component that moves its parent toward the player if the player is visible. It demonstrates the basic
-/// usage of the integration library's component system, as well as basic AStar pathfinding.
+/// Simple component that moves its parent toward the player, if the player is visible to it.
 /// </summary>
+/// <remarks>
+/// Any entities with this component will take their "turn" via the TakeTurn function after the player takes their action for a turn.
+/// </remarks>
 internal class HostileAI : RogueLikeComponentBase<RogueLikeEntity>
 {
     public HostileAI()
@@ -26,6 +28,6 @@ internal class HostileAI : RogueLikeComponentBase<RogueLikeEntity>
         var path = Parent.CurrentMap.AStar.ShortestPath(Parent.Position, Engine.Player.Position);
         if (path == null) return;
         var firstPoint = path.GetStep(0);
-        GameMap.MoveOrBump(Parent, Direction.GetDirection(firstPoint - Parent.Position));
+        GameMap.MoveOrBump(Parent, Direction.GetDirection(Parent.Position, firstPoint));
     }
 }

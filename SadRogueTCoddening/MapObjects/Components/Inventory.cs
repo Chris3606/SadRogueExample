@@ -23,6 +23,9 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         Items = new List<RogueLikeEntity>(capacity);
     }
 
+    /// <summary>
+    /// Drops the given item from this inventory.
+    /// </summary>
     public void Drop(RogueLikeEntity item)
     {
         if (Parent == null)
@@ -86,6 +89,9 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         return false;
     }
 
+    /// <summary>
+    /// Causes the parent to consume the given consumable item.  The given entity must have some component implementing IConsumable.
+    /// </summary>
     public bool Consume(RogueLikeEntity item)
     {
         if (Parent == null)

@@ -6,7 +6,7 @@ using SadRogueTCoddening.Themes;
 namespace SadRogueTCoddening.MapObjects.Components;
 
 /// <summary>
-/// Added to entities that have health and can attack.
+/// Component for entities that allows them to have health and attack.
 /// </summary>
 internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
 {

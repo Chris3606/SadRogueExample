@@ -4,6 +4,9 @@ using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening.MapObjects.Components.Items;
 
+/// <summary>
+/// Consumable that restores up to the given amount of HP.
+/// </summary>
 internal class HealingConsumable : RogueLikeComponentBase<RogueLikeEntity>, IConsumable
 {
     public int Amount { get; }
@@ -16,18 +19,20 @@ internal class HealingConsumable : RogueLikeComponentBase<RogueLikeEntity>, ICon
 
     public bool Consume(RogueLikeEntity consumer)
     {
+        var isPlayer = consumer == Engine.Player;
+        
         var combatant = consumer.AllComponents.GetFirst<Combatant>();
         var amountRecovered = combatant.Heal(Amount);
         if (amountRecovered > 0)
         {
-            if (consumer == Engine.Player)
+            if (isPlayer)
                 Engine.GameScreen?.MessageLog.AddMessage(new(
                     $"You consume the {Parent!.Name}, and recover {amountRecovered} HP!",
                     MessageColors.HealthRecoveredAppearance));
             return true;
         }
         
-        if (consumer == Engine.Player)
+        if (isPlayer)
             Engine.GameScreen?.MessageLog.AddMessage(new("Your health is already full.", MessageColors.ImpossibleActionAppearance));
         return true;
     }

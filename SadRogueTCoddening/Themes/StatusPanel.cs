@@ -3,6 +3,9 @@ using SadConsole.UI.Themes;
 
 namespace SadRogueTCoddening.Themes;
 
+/// <summary>
+/// Colors/themes related to the Screens.Surfaces.StatusPanel.
+/// </summary>
 internal static class StatusPanel
 {
 
