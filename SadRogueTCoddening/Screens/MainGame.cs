@@ -1,5 +1,7 @@
-﻿using SadConsole;
+﻿using System;
+using SadConsole;
 using SadConsole.Components;
+using SadRogueTCoddening.MapObjects.Components;
 using SadRogueTCoddening.Maps;
 using SadRogueTCoddening.Screens.Surfaces;
 using SadRogueTCoddening.Themes;
@@ -51,8 +53,22 @@ internal class MainGame : ScreenObject
         StatusPanel = new (StatusBarWidth, BottomPanelHeight);
         StatusPanel.Parent = this;
         StatusPanel.Position = new(0, Constants.ScreenHeight - BottomPanelHeight);
+
+        // Add player death handler
+        Engine.Player.AllComponents.GetFirst<Combatant>().Died += PlayerDeath;
         
         // Write welcome message
         MessageLog.AddMessage(new("Hello and welcome, adventurer, to yet another dungeon!", MessageColors.WelcomeTextAppearance));
+    }
+
+    /// <summary>
+    /// Called when the player dies.
+    /// </summary>
+    private static void PlayerDeath(object? s, EventArgs e)
+    {
+        Engine.Player.AllComponents.GetFirst<Combatant>().Died -= PlayerDeath;
+        // Go back to main menu for now
+        Game.Instance.Screen = new MainMenu();
+
     }
 }

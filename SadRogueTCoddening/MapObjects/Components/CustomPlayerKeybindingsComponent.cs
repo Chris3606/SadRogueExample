@@ -1,5 +1,6 @@
 ﻿using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
+using SadRogueTCoddening.Maps;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 
@@ -17,6 +18,6 @@ internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
         if (direction == Direction.None)
             PlayerActionHelper.PlayerTakeAction(_ => true);
         else
-            PlayerActionHelper.PlayerTakeAction(Engine.MoveOrBump, direction);
+            PlayerActionHelper.PlayerTakeAction(GameMap.MoveOrBump, direction);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using SadRogue.Integration;
 using SadRogueTCoddening.MapObjects.Components;
+using SadRogueTCoddening.Maps;
 
 namespace SadRogueTCoddening;
 
@@ -37,6 +38,6 @@ internal static class PlayerActionHelper
         if (Engine.Player.AllComponents.GetFirst<Combatant>().HP <= 0) return;
 
         // Otherwise, have the enemies take their turns.
-        Engine.TakeEnemyTurns(Engine.Player.CurrentMap!);
+        (Engine.Player.CurrentMap as GameMap)!.TakeEnemyTurns();
     }
 }

@@ -2,6 +2,7 @@
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogue.Primitives;
+using SadRogueTCoddening.Maps;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 
@@ -25,6 +26,6 @@ internal class HostileAI : RogueLikeComponentBase<RogueLikeEntity>
         var path = Parent.CurrentMap.AStar.ShortestPath(Parent.Position, Engine.Player.Position);
         if (path == null) return;
         var firstPoint = path.GetStep(0);
-        Engine.MoveOrBump(Parent, Direction.GetDirection(firstPoint - Parent.Position));
+        GameMap.MoveOrBump(Parent, Direction.GetDirection(firstPoint - Parent.Position));
     }
 }

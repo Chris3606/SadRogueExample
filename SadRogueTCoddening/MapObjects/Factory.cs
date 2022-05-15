@@ -67,9 +67,7 @@ internal static class Factory
         player.AllComponents.Add(new PlayerFOVController{ FOVRadius = 8 });
 
         // Player combatant
-        var combatant = new Combatant(30, 2, 5);
-        combatant.Died += Engine.PlayerDeath;
-        player.AllComponents.Add(combatant);
+        player.AllComponents.Add(new Combatant(30, 2, 5));
         
         // Player inventory
         player.AllComponents.Add(new Inventory(26));
@@ -86,10 +84,7 @@ internal static class Factory
             
         // Add AI component to bump action toward the player if the player is in view
         enemy.AllComponents.Add(new HostileAI());
-
-        var combatant = new Combatant(10, 0, 3);
-        combatant.Died += Engine.HostileDeath;
-        enemy.AllComponents.Add(combatant);
+        enemy.AllComponents.Add(new Combatant(10, 0, 3));
             
         return enemy;
     }
@@ -100,25 +95,22 @@ internal static class Factory
         {
             Name = "Troll"
         };
-            
-        enemy.AllComponents.Add(new HostileAI());
 
-        var combatant = new Combatant(16, 1, 4);
-        combatant.Died += Engine.HostileDeath;
-        enemy.AllComponents.Add(combatant);
+        // Add AI component to bump action toward the player if the player is in view
+        enemy.AllComponents.Add(new HostileAI());
+        enemy.AllComponents.Add(new Combatant(16, 1, 4));
 
         return enemy;
     }
 
     public static RogueLikeEntity Corpse(RogueLikeEntity entity)
-    {
-        var corpse = new RogueLikeEntity(entity.Appearance, layer: (int)GameMap.Layer.Items)
+        => new (entity.Appearance, layer: (int)GameMap.Layer.Items)
         {
             Name = $"Corpse - {entity.Name}",
-            Position = entity.Position
+            Position = entity.Position,
+            Appearance =
+            {
+                Glyph = '%'
+            }
         };
-        corpse.Appearance.Glyph = '%';
-
-        return corpse;
     }
-}
