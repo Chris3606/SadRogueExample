@@ -17,7 +17,7 @@ internal static class PlayerActionHelper
     /// take place.
     /// </summary>
     /// <param name="action">Action to be performed.  Takes the entity performing the action (the player in this case) as a parameter.</param>
-    public static void PlayerTakeAction(Func<RogueLikeEntity, bool> action) => PlayerTakeAction<bool>((entity, _) => action(entity), false);
+    public static void PlayerTakeAction(Func<RogueLikeEntity, bool> action) => PlayerTakeAction((entity, _) => action(entity), false);
 
     /// <summary>
     /// Causes the player to attempt to take the given action as a turn.  If the action succeeds, the player's turn will end and enemy's turns will

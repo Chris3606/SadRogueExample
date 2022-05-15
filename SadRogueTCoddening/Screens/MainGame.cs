@@ -1,7 +1,9 @@
 ﻿using SadConsole;
+using SadConsole.Components;
 using SadRogueTCoddening.Maps;
 using SadRogueTCoddening.Screens.Surfaces;
 using SadRogueTCoddening.Themes;
+using StatusPanel = SadRogueTCoddening.Screens.Surfaces.StatusPanel;
 
 namespace SadRogueTCoddening.Screens;
 
@@ -12,12 +14,12 @@ internal class MainGame : ScreenObject
 {
     public readonly GameMap Map;
     public readonly MessageLogConsole MessageLog;
-    public readonly Surfaces.StatusPanel StatusPanel;
+    public readonly StatusPanel StatusPanel;
     
     /// <summary>
     /// Component which locks the map's view onto an entity (usually the player).
     /// </summary>
-    public readonly SadConsole.Components.SurfaceComponentFollowTarget ViewLock;
+    public readonly SurfaceComponentFollowTarget ViewLock;
 
     private const int StatusBarWidth = 20;
     const int BottomPanelHeight = 5;
@@ -35,7 +37,7 @@ internal class MainGame : ScreenObject
         Map.IsFocused = true;
 
         // Center view on player as they move (by default)
-        ViewLock = new SadConsole.Components.SurfaceComponentFollowTarget { Target = Engine.Player };
+        ViewLock = new SurfaceComponentFollowTarget { Target = Engine.Player };
         Map.DefaultRenderer?.SadComponents.Add(ViewLock);
 
         // Create message log

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using SadConsole.Entities;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogueTCoddening.MapObjects.Components.Items;

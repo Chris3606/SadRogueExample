@@ -1,7 +1,5 @@
-﻿using SadRogue.Integration;
-using SadRogue.Integration.Keybindings;
+﻿using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
-using SadRogueTCoddening.Themes;
 
 namespace SadRogueTCoddening.MapObjects.Components;
 

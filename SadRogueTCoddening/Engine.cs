@@ -8,6 +8,7 @@ using SadRogueTCoddening.MapObjects.Components;
 using SadRogueTCoddening.Maps;
 using SadRogueTCoddening.Screens;
 using SadRogueTCoddening.Themes;
+using Factory = SadRogueTCoddening.MapObjects.Factory;
 
 namespace SadRogueTCoddening;
 
@@ -69,7 +70,7 @@ internal static class Engine
                     return true;
 
         if (entity == Player)
-            Engine.GameScreen?.MessageLog.AddMessage(new("That way is blocked.", MessageColors.ImpossibleActionAppearance));
+            GameScreen?.MessageLog.AddMessage(new("That way is blocked.", MessageColors.ImpossibleActionAppearance));
 
         return false;
     }
@@ -105,11 +106,11 @@ internal static class Engine
     public static void HostileDeath(object? s, EventArgs e)
     {
         var hostile = ((Combatant)s!).Parent!;
-        Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!", MessageColors.EnemyDiedAppearance));
+        GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!", MessageColors.EnemyDiedAppearance));
 
         // Switch entity for corpse
         var map = hostile.CurrentMap!;
         map.RemoveEntity(hostile);
-        map.AddEntity(MapObjects.Factory.Corpse(hostile));
+        map.AddEntity(Factory.Corpse(hostile));
     }
 }

@@ -2,6 +2,7 @@
 using SadConsole;
 using SadConsole.UI;
 using SadConsole.UI.Controls;
+using SadRogueTCoddening.MapObjects;
 using SadRogueTCoddening.MapObjects.Components;
 
 namespace SadRogueTCoddening.Screens;
@@ -49,7 +50,7 @@ public class MainMenu : ControlsConsole
     private void NewGameOnClick(object? sender, EventArgs e)
     {
         // Create player entity
-        Engine.Player = MapObjects.Factory.Player();
+        Engine.Player = Factory.Player();
         
         // Generate a dungeon map, and spawn the player/enemies
         var map = Maps.Factory.Dungeon();
