@@ -29,7 +29,7 @@ internal class GameMap : RogueLikeMap
     public GameMap(int width, int height, DefaultRendererParams? defaultRendererParams)
         : base(width, height, defaultRendererParams, Enum.GetValues<Layer>().Length - 1, Distance.Chebyshev)
     {
-        // Ensures HostileAdded is triggered when anything except the player dies so that corpses appear and messages trigger.
+        // Ensures HostileDeath is triggered when anything except the player dies so that corpses appear and messages trigger.
         Entities.ItemAdded += EntitiesOnItemAdded;
         Entities.ItemRemoved += EntitiesOnItemRemoved;
     }

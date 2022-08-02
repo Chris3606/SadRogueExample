@@ -50,9 +50,11 @@ internal class MainGame : ScreenObject
         };
 
         // Create status panel
-        StatusPanel = new(StatusBarWidth, BottomPanelHeight);
-        StatusPanel.Parent = this;
-        StatusPanel.Position = new(0, Engine.ScreenHeight - BottomPanelHeight);
+        StatusPanel = new(StatusBarWidth, BottomPanelHeight)
+        {
+            Parent = this,
+            Position = new(0, Engine.ScreenHeight - BottomPanelHeight)
+        };
 
         // Add player death handler
         Engine.Player.AllComponents.GetFirst<Combatant>().Died += PlayerDeath;
