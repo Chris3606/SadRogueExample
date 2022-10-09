@@ -1,5 +1,4 @@
-﻿using System;
-using GoRogue.MapGeneration;
+﻿using GoRogue.MapGeneration;
 using GoRogue.MapGeneration.ContextComponents;
 using GoRogue.Random;
 using SadRogue.Primitives;
@@ -69,7 +68,7 @@ internal static class Factory
                 bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
 
                 var enemy = isOrc ? MapObjects.Factory.Orc() : MapObjects.Factory.Troll();
-                enemy.Position = RandomPositionFromRect(GlobalRandom.DefaultRNG, room, pos => map.WalkabilityView[pos]);
+                enemy.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
                 map.AddEntity(enemy);
             }
         }
@@ -84,18 +83,9 @@ internal static class Factory
             for (int i = 0; i < potions; i++)
             {
                 var potion = MapObjects.Items.Factory.HealthPotion();
-                potion.Position = RandomPositionFromRect(GlobalRandom.DefaultRNG, room, pos => map.WalkabilityView[pos]);
+                potion.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
                 map.AddEntity(potion);
             }
         }
-    }
-
-    private static Point RandomPositionFromRect(IEnhancedRandom rng, Rectangle rect, Func<Point, bool> selector)
-    {
-        var pos = new Point(rng.NextInt(rect.X, rect.X + rect.Width), rng.NextInt(rect.Y, rect.Y + rect.Height));
-        while (!selector(pos))
-            pos = new Point(rng.NextInt(rect.X, rect.X + rect.Width), rng.NextInt(rect.Y, rect.Y + rect.Height));
-
-        return pos;
     }
 }
