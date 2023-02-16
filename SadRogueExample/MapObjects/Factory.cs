@@ -64,6 +64,17 @@ internal static class Factory
         // Add controls for picking up items and getting to inventory screen.
         motionControl.SetAction(Keys.G, () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
         motionControl.SetAction(Keys.C, () => Game.Instance.Screen.Children.Add(new ConsumableSelect()));
+        motionControl.SetAction(Keys.T, () =>
+        {
+            // Generate a dungeon map, spawn enemies, and note player spawn location
+            var (map, playerSpawn) = Maps.Factory.Dungeon();
+            
+            // Set GameScreen's map to the new one and spawn the player in appropriately
+            Engine.GameScreen?.SetMap(map, playerSpawn);
+
+            // Calculate initial FOV for player on this new map
+            Engine.Player.AllComponents.GetFirst<PlayerFOVController>().CalculateFOV();
+        });
 
         // Add component for updating map's player FOV as they move
         player.AllComponents.Add(new PlayerFOVController { FOVRadius = 8 });

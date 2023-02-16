@@ -19,7 +19,7 @@ internal static class Factory
     private const int MaxMonstersPerRoom = 2;
     private const int MaxPotionsPerRoom = 2;
 
-    public static GameMap Dungeon()
+    public static (GameMap map, Point playerSpawn) Dungeon()
     {
         // Generate a dungeon maze map
         var generator = new Generator(100, 60)
@@ -39,24 +39,23 @@ internal static class Factory
         // Translate GoRogue's terrain data into actual integration library objects.
         map.ApplyTerrainOverlay(generatedMap, (pos, val) => val ? MapObjects.Factory.Floor(pos) : MapObjects.Factory.Wall(pos));
 
-        // Spawn player
-        SpawnPlayer(map, rooms);
+        // Set player spawn
+        var playerSpawn = GetPlayerSpawn(rooms);
 
         // Spawn enemies/items/etc
-        SpawnMonsters(map, rooms);
-        SpawnPotions(map, rooms);
+        SpawnMonsters(map, rooms, playerSpawn);
+        SpawnPotions(map, rooms, playerSpawn);
 
-        return map;
+        return (map, playerSpawn);
     }
 
-    private static void SpawnPlayer(GameMap map, ItemList<Rectangle> rooms)
+    private static Point GetPlayerSpawn(ItemList<Rectangle> rooms)
     {
         // Add player to map at the center of the first room we placed
-        Engine.Player.Position = rooms.Items[0].Center;
-        map.AddEntity(Engine.Player);
+        return rooms.Items[0].Center;
     }
 
-    private static void SpawnMonsters(GameMap map, ItemList<Rectangle> rooms)
+    private static void SpawnMonsters(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
     {
         // Generate between zero and the max monsters per room.  Each monster has an 80% chance of being an orc (weaker)
         // and a 20% chance of being a troll (stronger).
@@ -68,13 +67,13 @@ internal static class Factory
                 bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
 
                 var enemy = isOrc ? MapObjects.Factory.Orc() : MapObjects.Factory.Troll();
-                enemy.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
+                enemy.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                 map.AddEntity(enemy);
             }
         }
     }
 
-    private static void SpawnPotions(GameMap map, ItemList<Rectangle> rooms)
+    private static void SpawnPotions(GameMap map, ItemList<Rectangle> rooms, Point playerSpawn)
     {
         // Generate between zero and the max potions per room.
         foreach (var room in rooms.Items)
@@ -83,7 +82,7 @@ internal static class Factory
             for (int i = 0; i < potions; i++)
             {
                 var potion = MapObjects.Items.Factory.HealthPotion();
-                potion.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
+                potion.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos] && pos != playerSpawn);
                 map.AddEntity(potion);
             }
         }
