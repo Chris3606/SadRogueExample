@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <LangVersion>default</LangVersion>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="SadConsole.Host.MonoGame" Version="9.2.2" />
-    <PackageReference Include="TheSadRogue.Integration" Version="1.0.0-beta01" />
+    <PackageReference Include="TheSadRogue.Integration" Version="1.0.0-beta02" />
   </ItemGroup>
 
 </Project>

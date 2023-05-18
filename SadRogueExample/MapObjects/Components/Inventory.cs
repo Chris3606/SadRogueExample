@@ -80,8 +80,6 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
                 Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}.",
                     MessageColors.ItemPickedUpAppearance));
 
-            // TODO: Not great place for this
-            //TakeEnemyTurns(Engine.Player.CurrentMap!);
             return true;
         }
         if (isPlayer)

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Linq;
 using GoRogue.GameFramework;
-using GoRogue.SpatialMaps;
 using SadConsole;
 using SadRogue.Integration;
 using SadRogue.Integration.Maps;
 using SadRogue.Primitives;
+using SadRogue.Primitives.SpatialMaps;
 using SadRogueExample.MapObjects.Components;
 using SadRogueExample.Themes;
 
