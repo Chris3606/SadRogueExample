@@ -19,13 +19,22 @@ internal class MainGameMenu : Window
         Show();
     }
 
-    protected void PrintTextAtCenter(string text)
+    /// <summary>
+    /// Prints the given text centered in the window.  You may optionally specify an X or a Y value, in which case
+    /// the text will be centered only along the other axis.
+    /// </summary>
+    protected void PrintTextAtCenter(string text, int? x = null, int? y = null)
     {
+        if (x.HasValue && y.HasValue)
+            throw new ArgumentException($"{nameof(PrintTextAtCenter)} should not be called with both an X and a Y value.");
+
         int effectiveWidth = Width - 2;
         if (text.Length > effectiveWidth)
             throw new ArgumentException("Message too long to print.");
 
-        var pos = new Point(effectiveWidth / 2 - text.Length / 2 + 1, (Height - 2) / 2 + 1);
+        int printX = x ?? effectiveWidth / 2 - text.Length / 2 + 1;
+        int printY = y ?? (Height - 2) / 2 + 1;
+        var pos = new Point(printX, printY);
         Cursor.Move(pos);
         Cursor.Print(text);
     }

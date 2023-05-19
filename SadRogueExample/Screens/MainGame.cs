@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Threading;
 using SadConsole;
 using SadConsole.Components;
+using SadConsole.UI;
 using SadRogueExample.MapObjects.Components;
 using SadRogueExample.Maps;
+using SadRogueExample.Screens.MainGameMenus;
 using SadRogueExample.Screens.Surfaces;
 using SadRogueExample.Themes;
 using StatusPanel = SadRogueExample.Screens.Surfaces.StatusPanel;
@@ -66,11 +69,14 @@ internal class MainGame : ScreenObject
     /// <summary>
     /// Called when the player dies.
     /// </summary>
-    private static void PlayerDeath(object? s, EventArgs e)
+    private void PlayerDeath(object? s, EventArgs e)
     {
+        MessageLog.AddMessage(new("You have died!", MessageColors.PlayerDiedAppearance));
+
         Engine.Player.AllComponents.GetFirst<Combatant>().Died -= PlayerDeath;
-        // Go back to main menu for now
-        Game.Instance.Screen = new MainMenu();
+
+        // Switch to game over screen
+        Children.Add(new GameOver());
 
     }
 }

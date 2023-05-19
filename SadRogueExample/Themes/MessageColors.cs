@@ -33,6 +33,14 @@ internal static class MessageColors
     };
 
     /// <summary>
+    /// Text indicating the player died.
+    /// </summary>
+    public static readonly ColoredString.ColoredGlyphEffect PlayerDiedAppearance = new()
+    {
+        Foreground = new(0xFF, 0x30, 0x30)
+    };
+
+    /// <summary>
     /// Text indicating an enemy died.
     /// </summary>
     public static readonly ColoredString.ColoredGlyphEffect EnemyDiedAppearance = new()
