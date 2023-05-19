@@ -76,8 +76,11 @@ internal class GameMap : RogueLikeMap
     public void TakeEnemyTurns()
     {
         var enemies = Entities.GetLayer((int)Layer.Monsters).Items.ToArray();
+        var playerCombatant = Engine.Player.GoRogueComponents.GetFirst<Combatant>();
         foreach (var enemy in enemies)
         {
+            if (playerCombatant.HP <= 0) break;
+
             var ai = enemy.GoRogueComponents.GetFirstOrDefault<HostileAI>();
             ai?.TakeTurn();
         }

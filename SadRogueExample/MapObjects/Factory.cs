@@ -110,7 +110,7 @@ internal static class Factory
     public static RogueLikeEntity Corpse(RogueLikeEntity entity)
         => new(entity.Appearance, layer: (int)GameMap.Layer.Items)
         {
-            Name = $"Corpse - {entity.Name}",
+            Name = $"Remains - {entity.Name}",
             Position = entity.Position,
             Appearance =
             {

@@ -29,15 +29,17 @@ internal static class PlayerActionHelper
     /// <param name="performParams">Parameters to pass to the action function.</param>
     public static void PlayerTakeAction<T>(Func<RogueLikeEntity, T, bool> action, T performParams)
     {
+        var player = Engine.Player;
+
         // If the action failed, then we won't take up a turn.
-        if (!action(Engine.Player, performParams))
+        if (!action(player, performParams))
             return;
 
         // The player completed their turn by successfully taking an action; but if they somehow died in the process, we'll just return
-        // because the Engine's death handlers will be dealing with the situation.
-        if (Engine.Player.AllComponents.GetFirst<Combatant>().HP <= 0) return;
+        // because the main game screen's death handlers will have already dealt with the situation.
+        if (player.AllComponents.GetFirst<Combatant>().HP <= 0) return;
 
         // Otherwise, have the enemies take their turns.
-        (Engine.Player.CurrentMap as GameMap)!.TakeEnemyTurns();
+        (player.CurrentMap as GameMap)!.TakeEnemyTurns();
     }
 }
