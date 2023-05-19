@@ -8,6 +8,20 @@ using ShaiRandom.Generators;
 namespace SadRogueExample.Maps;
 
 /// <summary>
+/// Configuration object specifying the parameters for dungeon generation.
+/// </summary>
+/// <param name="Width">The width of the generated dungeon map.</param>
+/// <param name="Height">The height of the generated dungeon map.</param>
+/// <param name="MinRooms">The minimum number of rooms that the generated dungeon map will have.</param>
+/// <param name="MaxRooms">The maximum number of rooms that the generated dungeon map will have.</param>
+/// <param name="RoomMinSize">The minimum size of a room.</param>
+/// <param name="RoomMaxSize">The maximum size of a room.</param>
+/// <param name="MaxMonstersPerRoom">The maximum number of monsters that can spawn in a single room.</param>
+/// <param name="MaxPotionsPerRoom">The maximum number of health potions that can spawn in a single room.</param>
+public readonly record struct DungeonGenConfig(int Width, int Height, int MinRooms, int MaxRooms, int RoomMinSize,
+    int RoomMaxSize, int MaxMonstersPerRoom, int MaxPotionsPerRoom);
+
+/// <summary>
 /// Basic factory which produces different types of maps.
 /// </summary>
 /// <remarks>
@@ -16,16 +30,14 @@ namespace SadRogueExample.Maps;
 /// </remarks>
 internal static class Factory
 {
-    private const int MaxMonstersPerRoom = 2;
-    private const int MaxPotionsPerRoom = 2;
-
-    public static GameMap Dungeon()
+    public static GameMap Dungeon(DungeonGenConfig config)
     {
         // Generate a dungeon maze map
-        var generator = new Generator(100, 60)
+        var generator = new Generator(config.Width, config.Height)
             .ConfigAndGenerateSafe(gen =>
             {
-                gen.AddSteps(DefaultAlgorithms.DungeonMazeMapSteps(minRooms: 20, maxRooms: 30, roomMinSize: 8, roomMaxSize: 12, saveDeadEndChance: 0));
+                gen.AddSteps(DefaultAlgorithms.DungeonMazeMapSteps(minRooms: config.MinRooms, maxRooms: config.MaxRooms,
+                    roomMinSize: config.RoomMinSize, roomMaxSize: config.RoomMaxSize, saveDeadEndChance: 0));
             });
 
         // Extract components from the map GoRogue generated which hold basic information about the map
@@ -43,8 +55,8 @@ internal static class Factory
         SpawnPlayer(map, rooms);
 
         // Spawn enemies/items/etc
-        SpawnMonsters(map, rooms);
-        SpawnPotions(map, rooms);
+        SpawnMonsters(map, rooms, config.MaxMonstersPerRoom);
+        SpawnPotions(map, rooms, config.MaxPotionsPerRoom);
 
         return map;
     }
@@ -56,13 +68,13 @@ internal static class Factory
         map.AddEntity(Engine.Player);
     }
 
-    private static void SpawnMonsters(GameMap map, ItemList<Rectangle> rooms)
+    private static void SpawnMonsters(GameMap map, ItemList<Rectangle> rooms, int maxMonstersPerRoom)
     {
         // Generate between zero and the max monsters per room.  Each monster has an 80% chance of being an orc (weaker)
         // and a 20% chance of being a troll (stronger).
         foreach (var room in rooms.Items)
         {
-            int enemies = GlobalRandom.DefaultRNG.NextInt(0, MaxMonstersPerRoom + 1);
+            int enemies = GlobalRandom.DefaultRNG.NextInt(0, maxMonstersPerRoom + 1);
             for (int i = 0; i < enemies; i++)
             {
                 bool isOrc = GlobalRandom.DefaultRNG.PercentageCheck(80f);
@@ -74,12 +86,12 @@ internal static class Factory
         }
     }
 
-    private static void SpawnPotions(GameMap map, ItemList<Rectangle> rooms)
+    private static void SpawnPotions(GameMap map, ItemList<Rectangle> rooms, int maxPotionsPerRoom)
     {
         // Generate between zero and the max potions per room.
         foreach (var room in rooms.Items)
         {
-            int potions = GlobalRandom.DefaultRNG.NextInt(0, MaxPotionsPerRoom + 1);
+            int potions = GlobalRandom.DefaultRNG.NextInt(0, maxPotionsPerRoom + 1);
             for (int i = 0; i < potions; i++)
             {
                 var potion = MapObjects.Items.Factory.HealthPotion();

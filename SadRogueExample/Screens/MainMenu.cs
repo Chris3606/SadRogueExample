@@ -53,7 +53,7 @@ public class MainMenu : ControlsConsole
         Engine.Player = Factory.Player();
 
         // Generate a dungeon map, and spawn the player/enemies
-        var map = Maps.Factory.Dungeon();
+        var map = Maps.Factory.Dungeon(new(100, 60, 20, 30, 8, 12, 2, 2));
 
         // Calculate initial FOV for player
         Engine.Player.AllComponents.GetFirst<PlayerFOVController>().CalculateFOV();
