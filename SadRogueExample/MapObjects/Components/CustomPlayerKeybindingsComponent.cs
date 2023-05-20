@@ -5,7 +5,7 @@ using SadRogueExample.Maps;
 namespace SadRogueExample.MapObjects.Components;
 
 /// <summary>
-/// Subclass of the integration library's keybindings component that ensures the player's movements count as the player's turn when successful.
+/// Subclass of the integration library's keybindings component that ensures the player's movements count as the player's turn when (and only when) successful.
 /// </summary>
 internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
 {
