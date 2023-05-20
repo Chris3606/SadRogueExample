@@ -1,13 +1,10 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading;
-using Microsoft.Xna.Framework.Input;
 using SadConsole;
 using SadConsole.Components;
-using SadConsole.Entities;
 using SadConsole.Input;
-using SadConsole.UI;
 using SadRogue.Integration;
+using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
 using SadRogueExample.MapObjects.Components;
 using SadRogueExample.Maps;
@@ -84,7 +81,7 @@ internal class MainGame : ScreenObject
     }
 
     private readonly LookModeFollowMouseComponent _lookModeFollowComponent;
-    private readonly CustomPlayerKeybindingsComponent _keybindings;
+    public readonly CustomPlayerKeybindingsComponent Keybindings;
 
     private const int StatusBarWidth = 25;
     private const int BottomPanelHeight = 5;
@@ -130,11 +127,11 @@ internal class MainGame : ScreenObject
         // Create component which will have the LookMarker follow the mouse in look mode (but do not attach it yet)
         _lookModeFollowComponent = new LookModeFollowMouseComponent(this);
 
-        // Cache the keybindings component for convenience, since this screen will add some bindings and the player will not change during the lifetime
-        // of this screen.
-        _keybindings = Engine.Player.AllComponents.GetFirst<CustomPlayerKeybindingsComponent>();
+        // Create the Keybindings component which implements main actions/player movement.
+        Keybindings = new CustomPlayerKeybindingsComponent();
+        Map.SadComponents.Add(Keybindings);
 
-        // Set up screen-specific keybindings
+        // Set up Keybindings and motions
         SetKeybindings();
 
         // Add player death handler
@@ -144,23 +141,21 @@ internal class MainGame : ScreenObject
         MessageLog.AddMessage(new("Hello and welcome, adventurer, to yet another dungeon!", MessageColors.WelcomeTextAppearance));
     }
 
-    /// <summary>
-    /// Sets various keybindings that this screen adds to the player's keybindings component.
-    /// </summary>
-    public void SetKeybindings()
+    private void SetKeybindings()
     {
-        // "Look" functionality keybindings
-        _keybindings.SetAction(SadConsole.Input.Keys.L, () => LookMode = true);
-        _keybindings.SetAction(SadConsole.Input.Keys.Escape, () => LookMode = false);
-    }
+        // Add Keybindings controlling player movement via keyboard.
+        Keybindings.SetMotions(PlayerKeybindingsComponent.ArrowMotions);
+        Keybindings.SetMotions(PlayerKeybindingsComponent.NumPadAllMotions);
+        Keybindings.SetMotion(SadConsole.Input.Keys.NumPad5, Direction.None);
+        Keybindings.SetMotion(SadConsole.Input.Keys.OemPeriod, Direction.None);
 
-    /// <summary>
-    /// Removes keybindings set when the screen was created from the player's keybindings component.
-    /// </summary>
-    public void RemoveKeybindings()
-    {
-        _keybindings.RemoveAction(SadConsole.Input.Keys.L);
-        _keybindings.RemoveAction(SadConsole.Input.Keys.Escape);
+        // Add controls for picking up items and getting to inventory screen.
+        Keybindings.SetAction(SadConsole.Input.Keys.G, () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
+        Keybindings.SetAction(SadConsole.Input.Keys.C, () => Children.Add(new ConsumableSelect()));
+            
+        // "Look" functionality Keybindings
+        Keybindings.SetAction(SadConsole.Input.Keys.L, () => LookMode = true);
+        Keybindings.SetAction(SadConsole.Input.Keys.Escape, () => LookMode = false);
     }
 
     /// <summary>

@@ -11,8 +11,6 @@ internal class CustomPlayerKeybindingsComponent : PlayerKeybindingsComponent
 {
     protected override void MotionHandler(Direction direction)
     {
-        if (Parent == null) return;
-
         // If we're waiting a turn, there's nothing to do; it's always a valid turn to wait
         if (direction == Direction.None)
             PlayerActionHelper.PlayerTakeAction(_ => true);

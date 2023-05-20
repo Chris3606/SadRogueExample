@@ -16,9 +16,9 @@ namespace SadRogueExample.Screens.MainGameMenus
             Title = "Game Over!";
 
             // Remove the player's keyboard handler to ensure they can't take actions
-            var keybindings = Engine.Player.AllComponents.GetFirstOrDefault<CustomPlayerKeybindingsComponent>();
+            var keybindings = Parent.GetSadComponent<CustomPlayerKeybindingsComponent>();
             if (keybindings != null)
-                Engine.Player.AllComponents.Remove(keybindings);
+                Parent.SadComponents.Remove(keybindings);
 
             // Don't allow the player to close the menu
             CloseOnEscKey = false;
@@ -49,8 +49,6 @@ namespace SadRogueExample.Screens.MainGameMenus
         {
             Hide();
 
-            // TODO: Move this to GameScreen set?
-            Engine.GameScreen!.RemoveKeybindings();
             Engine.GameScreen = null;
             
             GameHost.Instance.Screen = new MainMenu();

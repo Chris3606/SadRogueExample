@@ -53,20 +53,6 @@ internal static class Factory
             Name = "Player"
         };
 
-        // Add component for detecting keypresses/implementing actions.
-        var keybindings = new CustomPlayerKeybindingsComponent();
-        player.AllComponents.Add(keybindings);
-
-        // Add keybindings controlling player movement via keyboard.
-        keybindings.SetMotions(PlayerKeybindingsComponent.ArrowMotions);
-        keybindings.SetMotions(PlayerKeybindingsComponent.NumPadAllMotions);
-        keybindings.SetMotion(Keys.NumPad5, Direction.None);
-        keybindings.SetMotion(Keys.OemPeriod, Direction.None);
-
-        // Add controls for picking up items and getting to inventory screen.
-        keybindings.SetAction(Keys.G, () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
-        keybindings.SetAction(Keys.C, () => Game.Instance.Screen.Children.Add(new ConsumableSelect()));
-
         // Add component for updating map's player FOV as they move
         player.AllComponents.Add(new PlayerFOVController { FOVRadius = 8 });
 
