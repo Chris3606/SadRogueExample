@@ -27,7 +27,7 @@ internal static class MessageColors
     /// <summary>
     /// Text indicating an enemy attacked the player.
     /// </summary>
-    public static readonly ColoredString.ColoredGlyphEffect EnemyAtkAtkAppearance = new()
+    public static readonly ColoredString.ColoredGlyphEffect EnemyAtkAppearance = new()
     {
         Foreground = new(0xFF, 0xC0, 0xC0)
     };

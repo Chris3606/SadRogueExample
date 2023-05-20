@@ -56,7 +56,7 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         int damage = Power - target.Defense;
         string attackDesc = $"{Parent!.Name} attacks {target.Parent!.Name}";
 
-        var atkTextColor = Parent == Engine.Player ? MessageColors.PlayerAtkAppearance : MessageColors.EnemyAtkAtkAppearance;
+        var atkTextColor = Parent == Engine.Player ? MessageColors.PlayerAtkAppearance : MessageColors.EnemyAtkAppearance;
         if (damage > 0)
         {
             Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor));
