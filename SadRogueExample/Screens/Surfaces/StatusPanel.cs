@@ -9,11 +9,12 @@ using SadRogueExample.MapObjects.Components;
 namespace SadRogueExample.Screens.Surfaces;
 
 /// <summary>
-/// A ControlsConsole subclass which resides on the main game screen and displays the player's health and similar "hud" statistics.
+/// A ControlsConsole subclass which resides on the main game screen and displays the player's health and similar "hud" statistics and info.
 /// </summary>
 internal class StatusPanel : ControlsConsole
 {
     public readonly ProgressBar HPBar;
+    public readonly Label LookInfo;
 
     public StatusPanel(int width, int height)
         : base(width, height)
@@ -30,6 +31,16 @@ internal class StatusPanel : ControlsConsole
         Controls.Add(HPBar);
         Engine.Player.AllComponents.GetFirst<Combatant>().HPChanged += OnPlayerHPChanged;
         UpdateHPBar();
+
+        // Create a label to display information about the tile the player is looking at
+        LookInfo = new Label(width)
+        {
+            DisplayText = "",
+            Position = (0, 1)
+        };
+
+        // Add label to controls
+        Controls.Add(LookInfo);
     }
 
     private void OnPlayerHPChanged(object? sender, EventArgs e)

@@ -47,10 +47,13 @@ namespace SadRogueExample.Screens.MainGameMenus
 
         private void MainMenuOnClick(object? sender, EventArgs e)
         {
-            Engine.GameScreen = null;
-            GameHost.Instance.Screen = new MainMenu();
-
             Hide();
+
+            // TODO: Move this to GameScreen set?
+            Engine.GameScreen!.RemoveKeybindings();
+            Engine.GameScreen = null;
+            
+            GameHost.Instance.Screen = new MainMenu();
         }
 
         private void ExitOnClick(object? sender, EventArgs e)
