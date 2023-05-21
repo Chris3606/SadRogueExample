@@ -32,10 +32,11 @@ namespace SadRogueExample.MapObjects.Components.AI
             // If we've moved the number of turns we were confused for, revert to the old AI
             if (_numTurns <= 0)
             {
-                Parent.AllComponents.Remove(this);
-                Parent.AllComponents.Add(_previousAI);
+                var parent = Parent;
+                parent.AllComponents.Remove(this);
+                parent.AllComponents.Add(_previousAI);
                 // TODO: Choose color
-                Engine.GameScreen?.MessageLog.AddMessage(new($"{Parent.Name} is no longer confused!", MessageColors.ImpossibleActionAppearance));
+                Engine.GameScreen?.MessageLog.AddMessage(new($"{parent.Name} is no longer confused!", MessageColors.ImpossibleActionAppearance));
             }
         }
     }

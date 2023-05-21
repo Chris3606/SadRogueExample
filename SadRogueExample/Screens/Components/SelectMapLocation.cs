@@ -122,17 +122,17 @@ internal class SelectMapLocation : RogueLikeComponentBase<IScreenSurface>
         //
         // Note that this logic may very well break if the user moves the viewport during the selection; that is impossible for our current use cases,
         // however.
-        if (state.SurfaceCellPosition != _lastMousePosition || state.Mouse.LeftClicked)
+        if (state.SurfaceCellPosition != _lastMousePosition)
         {
             // Set the look marker's position to the mouse position.  We use SurfaceCellPosition instead of CellPosition
             // because we need the position relative to viewport/position, not position on the map.
             _lastMousePosition = state.SurfaceCellPosition;
             LookMarker.Position = state.SurfaceCellPosition;
-
-            // Trigger selection on left click
-            if (state.Mouse.LeftClicked)
-                OnPositionSelected();
         }
+
+        // Trigger selection on left click
+        if (state.Mouse.LeftClicked)
+            OnPositionSelected();
     }
 
     private void OnPositionSelected()

@@ -31,4 +31,16 @@ internal static class Factory
 
         return scroll;
     }
+
+    // TODO: Convert to SingleTargetConsumable
+    public static RogueLikeEntity ConfusionScroll()
+    {
+        var scroll = new RogueLikeEntity(new Color(207, 63, 255), '~', layer: (int)GameMap.Layer.Items)
+        {
+            Name = "Confusion Scroll"
+        };
+        scroll.AllComponents.Add(new ConfusionConsumable(10));
+
+        return scroll;
+    }
 }

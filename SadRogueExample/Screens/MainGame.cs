@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using GoRogue.GameFramework;
 using SadConsole;
 using SadConsole.Components;
 using SadConsole.Input;
@@ -22,13 +23,13 @@ namespace SadRogueExample.Screens;
 internal class LookModeComponent : SelectMapLocation
 {
     private readonly Label _lookLabel;
-    private readonly RogueLikeMap _map;
+    protected readonly RogueLikeMap Map;
 
     public LookModeComponent(Func<Point> getLookMarkerSurfaceStartingLocation, RogueLikeMap map, Label lookLabel)
         :base(getLookMarkerSurfaceStartingLocation)
     {
         _lookLabel = lookLabel;
-        _map = map;
+        Map = map;
 
         PositionChanged += LookModeComponent_PositionChanged;
     }
@@ -36,7 +37,7 @@ internal class LookModeComponent : SelectMapLocation
     private void LookModeComponent_PositionChanged(object? sender, LookMarkerPositionEventArgs e)
     {
         // Generate the text to display in the status panel.
-        var entityName = "You see " + (_map.GetEntityAt<RogueLikeEntity>(e.Position.MapPosition)?.Name ?? "nothing here.");
+        var entityName = "You see " + (Map.GetEntityAt<RogueLikeEntity>(e.Position.MapPosition)?.Name ?? "nothing here.");
         _lookLabel.DisplayText = entityName;
     }
 
@@ -44,6 +45,22 @@ internal class LookModeComponent : SelectMapLocation
     {
         base.OnRemoved(host);
         _lookLabel.DisplayText = "";
+    }
+}
+
+internal class TargetEntityComponent : LookModeComponent
+{
+    public RogueLikeEntity? TargetEntity { get; private set; }
+
+    public TargetEntityComponent(Func<Point> getLookMarkerSurfaceStartingLocation, RogueLikeMap map, Label lookLabel)
+        : base(getLookMarkerSurfaceStartingLocation, map, lookLabel)
+    {
+        PositionChanged += TargetEntityComponent_PositionChanged;
+    }
+
+    private void TargetEntityComponent_PositionChanged(object? sender, LookMarkerPositionEventArgs e)
+    {
+        TargetEntity = Map.GetEntityAt<RogueLikeEntity>(e.Position.MapPosition);
     }
 }
 
@@ -117,7 +134,8 @@ internal class MainGame : ScreenObject
             Position = new(0, Engine.ScreenHeight - BottomPanelHeight)
         };
 
-        // Create components for various states that this screen controls (but do not attach any yet)
+        // Create the cached components for various states that this screen controls (but do not attach any yet).
+        // States which do not have a component created here must have one passed to SetState when that state is activated.
         var mainMapComponent = new MainMapKeybindingsComponent();
         SetKeybindings(mainMapComponent);
 
