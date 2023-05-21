@@ -94,8 +94,13 @@ internal static class Factory
             int items = GlobalRandom.DefaultRNG.NextInt(0, maxItemsPerRoom + 1);
             for (int i = 0; i < items; i++)
             {
-                var isPotion = GlobalRandom.DefaultRNG.PercentageCheck(10f);
-                var item = isPotion ? MapObjects.Items.Factory.HealthPotion() : MapObjects.Items.Factory.ConfusionScroll();
+                var pctCheck = GlobalRandom.DefaultRNG.NextFloat();
+                var item = pctCheck switch
+                {
+                    <0.7f => MapObjects.Items.Factory.HealthPotion(),
+                    <0.9f => MapObjects.Items.Factory.LightningScroll(),
+                    _ => MapObjects.Items.Factory.ConfusionScroll()
+                };
                 item.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
                 map.AddEntity(item);
             }
