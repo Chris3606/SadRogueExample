@@ -7,6 +7,7 @@ using SadRogue.Integration.Maps;
 using SadRogue.Primitives;
 using SadRogue.Primitives.SpatialMaps;
 using SadRogueExample.MapObjects.Components;
+using SadRogueExample.MapObjects.Components.AI;
 using SadRogueExample.Themes;
 
 namespace SadRogueExample.Maps;
@@ -81,7 +82,7 @@ internal class GameMap : RogueLikeMap
         {
             if (playerCombatant.HP <= 0) break;
 
-            var ai = enemy.GoRogueComponents.GetFirstOrDefault<HostileAI>();
+            var ai = enemy.GoRogueComponents.GetFirstOrDefault<AIBase>();
             ai?.TakeTurn();
         }
     }

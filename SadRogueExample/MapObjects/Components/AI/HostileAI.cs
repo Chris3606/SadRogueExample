@@ -4,24 +4,20 @@ using SadRogue.Integration.Components;
 using SadRogue.Primitives;
 using SadRogueExample.Maps;
 
-namespace SadRogueExample.MapObjects.Components;
+namespace SadRogueExample.MapObjects.Components.AI;
 
 /// <summary>
-/// Simple component that moves its parent toward the player, if the player is visible to it.
+/// Simple component that moves its parent toward the player, if the player is visible to it.  If the entity bumps into the player,
+/// they will attack it.  If the player is not visible, they will move toward the player's last known position.
 /// </summary>
 /// <remarks>
 /// Any entities with this component will take their "turn" via the TakeTurn function after the player takes their action for a turn.
 /// </remarks>
-internal class HostileAI : RogueLikeComponentBase<RogueLikeEntity>
+internal class HostileAI : AIBase
 {
     private Point _lastPlayerPosition = Point.None;
 
-    public HostileAI()
-        : base(false, false, false, false)
-    {
-    }
-
-    public void TakeTurn()
+    public override void TakeTurn()
     {
         if (Parent?.CurrentMap == null) return;
         if (Parent.AllComponents.GetFirst<Combatant>().HP <= 0) return;
@@ -30,10 +26,10 @@ internal class HostileAI : RogueLikeComponentBase<RogueLikeEntity>
         var moveToPosition = Parent.CurrentMap.PlayerFOV.CurrentFOV.Contains(Parent.Position)
             ? Engine.Player.Position
             : _lastPlayerPosition;
-        if (moveToPosition == Point.None) return;
+        if (moveToPosition == Point.None || Parent.Position == moveToPosition) return;
 
         _lastPlayerPosition = moveToPosition; // Record the last known position of the player
-        
+
         var path = Parent.CurrentMap.AStar.ShortestPath(Parent.Position, moveToPosition);
         if (path == null) return;
         var firstPoint = path.GetStep(0);
