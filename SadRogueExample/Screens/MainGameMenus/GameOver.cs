@@ -16,7 +16,7 @@ namespace SadRogueExample.Screens.MainGameMenus
             Title = "Game Over!";
 
             // Remove the player's keyboard handler to ensure they can't take actions
-            var keybindings = Parent.GetSadComponent<CustomPlayerKeybindingsComponent>();
+            var keybindings = Parent.GetSadComponent<CustomKeybindingsComponent>();
             if (keybindings != null)
                 Parent.SadComponents.Remove(keybindings);
 

@@ -4,7 +4,9 @@ using SadConsole;
 using SadConsole.Components;
 using SadConsole.Input;
 using SadRogue.Integration;
+using SadRogue.Integration.Components;
 using SadRogue.Integration.Keybindings;
+using SadRogue.Integration.Maps;
 using SadRogue.Primitives;
 using SadRogueExample.MapObjects.Components;
 using SadRogueExample.Maps;
@@ -15,28 +17,75 @@ using StatusPanel = SadRogueExample.Screens.Surfaces.StatusPanel;
 
 namespace SadRogueExample.Screens;
 
-/// <summary>
-/// Component which causes the LookMarker in a GameScreen to follow the mouse and generates the appropriate display text.
-/// </summary>
-internal class LookModeFollowMouseComponent : MouseConsoleComponent
+internal record struct LookMarkerPosition(Point SurfacePosition, Point MapPosition);
+
+internal class LookMarkerPositionChangedEventArgs : EventArgs
 {
-    private readonly MainGame _gameScreen;
-    public LookModeFollowMouseComponent(MainGame gameScreen)
+    public readonly LookMarkerPosition NewPosition;
+
+    public LookMarkerPositionChangedEventArgs(LookMarkerPosition newPosition)
     {
-        _gameScreen = gameScreen;
+        NewPosition = newPosition;
+    }
+}
+
+/// <summary>
+/// Component which can be used to let the user select a location on the map by moving the mouse.
+/// This component should be added to a map renderer directly.
+/// </summary>
+internal class SelectLocationComponent : RogueLikeComponentBase<IScreenSurface>
+{
+    public readonly ScreenSurface LookMarker;
+    public LookMarkerPosition LookMarkerPosition { get; private set; }
+    public event EventHandler<LookMarkerPositionChangedEventArgs>? LookMarkerPositionChanged;
+
+    private readonly Color _lookMarkerColor = new(200, 0, 0, 170);
+
+
+    public SelectLocationComponent()
+        : base(false, false, false, true)
+    {
+        // Create the console we'll use as the marker to show where the user is looking.
+        LookMarker = new(1, 1);
+        LookMarker.Surface.Fill(Color.Transparent, _lookMarkerColor, 0);
+        LookMarkerPosition = new(Point.Zero, Point.Zero);
+
+        // Update the marker's position relative to the surface and map when the mouse moves
+        LookMarker.PositionChanged += LookMarker_PositionChanged;
+    }
+
+    public override void OnAdded(IScreenObject host)
+    {
+        base.OnAdded(host);
+        host.Children.Add(LookMarker);
+    }
+
+    public override void OnRemoved(IScreenObject host)
+    {
+        base.OnRemoved(host);
+        host.Children.Remove(LookMarker);
     }
 
     public override void ProcessMouse(IScreenObject host, MouseScreenObjectState state, [UnscopedRef] out bool handled)
     {
         // Set the look marker's position to the mouse position.  We use SurfaceCellPosition instead of CellPosition
         // because we need the position relative to viewport/position, not position on the map.
-        _gameScreen.LookMarker.Position = state.SurfaceCellPosition;
+        LookMarker.Position = state.SurfaceCellPosition;
         
         // Generate the text to display in the status panel.  Here, we need the CellPosition because we need to check the actual map position.
-        var entityName = "You see " + (_gameScreen.Map.GetEntityAt<RogueLikeEntity>(state.CellPosition)?.Name ?? "nothing here.");
-        _gameScreen.StatusPanel.LookInfo.DisplayText = entityName;
+        //var entityName = "You see " + (_gameScreen.Map.GetEntityAt<RogueLikeEntity>(state.CellPosition)?.Name ?? "nothing here.");
+        //_gameScreen.StatusPanel.LookInfo.DisplayText = entityName;
 
         handled = true;
+
+        // TODO: Handle click
+    }
+
+    private void LookMarker_PositionChanged(object? sender, SadConsole.ValueChangedEventArgs<Point> e)
+    {
+        // The entity position is in surface position; so we calculate the map position based on that
+        LookMarkerPosition = new(e.NewValue, e.NewValue + (Parent?.Surface.ViewPosition ?? Point.Zero));
+        LookMarkerPositionChanged?.Invoke(this, new LookMarkerPositionChangedEventArgs(LookMarkerPosition));
     }
 }
 
@@ -48,7 +97,7 @@ internal class MainGame : ScreenObject
     public readonly GameMap Map;
     public readonly MessageLogConsole MessageLog;
     public readonly StatusPanel StatusPanel;
-    public readonly ScreenSurface LookMarker;
+    //public readonly ScreenSurface LookMarker;
 
     /// <summary>
     /// Component which locks the map's view onto an entity (usually the player).
@@ -81,7 +130,7 @@ internal class MainGame : ScreenObject
     }
 
     private readonly LookModeFollowMouseComponent _lookModeFollowComponent;
-    public readonly CustomPlayerKeybindingsComponent Keybindings;
+    public readonly CustomKeybindingsComponent Keybindings;
 
     private const int StatusBarWidth = 25;
     private const int BottomPanelHeight = 5;
@@ -128,7 +177,7 @@ internal class MainGame : ScreenObject
         _lookModeFollowComponent = new LookModeFollowMouseComponent(this);
 
         // Create the Keybindings component which implements main actions/player movement.
-        Keybindings = new CustomPlayerKeybindingsComponent();
+        Keybindings = new CustomKeybindingsComponent();
         Map.SadComponents.Add(Keybindings);
 
         // Set up Keybindings and motions
