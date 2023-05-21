@@ -20,4 +20,15 @@ internal static class Factory
 
         return potion;
     }
+
+    public static RogueLikeEntity LightningScroll()
+    {
+        var scroll = new RogueLikeEntity(new Color(255, 255, 0), '~', layer: (int)GameMap.Layer.Items)
+        {
+            Name = "Lightning Scroll"
+        };
+        scroll.AllComponents.Add(new LightningDamageConsumable(20, 5));
+
+        return scroll;
+    }
 }

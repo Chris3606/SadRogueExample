@@ -15,7 +15,7 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
     public int HP
     {
         get => _hp;
-        private set
+        set
         {
             if (_hp == value) return;
 
