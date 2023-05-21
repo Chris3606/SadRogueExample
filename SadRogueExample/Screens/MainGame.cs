@@ -162,7 +162,7 @@ internal class MainGame : ScreenObject
         component.SetAction(Keys.C, () => Children.Add(new ConsumableSelect()));
 
         // "Look" functionality Keybindings
-        component.SetAction(Keys.L, () => CurrentState = State.LookMode);
+        component.SetAction(Keys.OemQuestion, () => CurrentState = State.LookMode);
         //component.SetAction(Keys.Escape, () => LookMode = false); // TODO: Remove this
     }
 
