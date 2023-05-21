@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using SadConsole;
 using SadConsole.Components;
 using SadConsole.Input;
@@ -62,7 +63,11 @@ internal class MainGame : ScreenObject
         /// <summary>
         /// The player is in the process of looking around using the "look mode".
         /// </summary>
-        LookMode
+        LookMode,
+        /// <summary>
+        /// The player is selecting an entity to target for an action.
+        /// </summary>
+        TargetEntityMode
     }
 
     public readonly GameMap Map;
@@ -74,24 +79,8 @@ internal class MainGame : ScreenObject
     /// </summary>
     public readonly SurfaceComponentFollowTarget ViewLock;
 
-    private State _currentState;
-    public State CurrentState
-    {
-        get => _currentState;
-        set
-        {
-            if (value == _currentState) return;
-
-            // Remove the current state's component from the renderer
-            Map.DefaultRenderer!.SadComponents.Remove(_stateComponents[_currentState]);
-
-            // Set new state
-            _currentState = value;
-
-            // Add the new state's component to the renderer
-            Map.DefaultRenderer!.SadComponents.Add(_stateComponents[_currentState]);
-        }
-    }
+    private (State State, IComponent Component) _currentState;
+    public (State State, IComponent Component) CurrentState => _currentState;
 
     private readonly Dictionary<State, IComponent> _stateComponents;
 
@@ -134,7 +123,7 @@ internal class MainGame : ScreenObject
 
         var lookModeComponent = new LookModeComponent(
             () => Engine.Player.Position - Map.DefaultRenderer.Surface.ViewPosition, Map, StatusPanel.LookInfo);
-        lookModeComponent.SelectionCancelled += (_, _) => CurrentState = State.MainMap;
+        lookModeComponent.SelectionCancelled += (_, _) => SetState(State.MainMap);
 
         _stateComponents = new()
         {
@@ -145,14 +134,48 @@ internal class MainGame : ScreenObject
         };
 
         // Switch to main map state
-        _currentState = State.MainMap;
-        Map.DefaultRenderer.SadComponents.Add(_stateComponents[State.MainMap]);
+        _currentState = (State.MainMap, _stateComponents[State.MainMap]);
+        Map.DefaultRenderer.SadComponents.Add(_currentState.Component);
 
         // Add player death handler
         Engine.Player.AllComponents.GetFirst<Combatant>().Died += PlayerDeath;
 
         // Write welcome message
         MessageLog.AddMessage(new("Hello and welcome, adventurer, to yet another dungeon!", MessageColors.WelcomeTextAppearance));
+    }
+
+    public void SetState(State state)
+    {
+        if (!_stateComponents.TryGetValue(state, out var stateComponent))
+            throw new ArgumentException($"State {state} does not have a predetermined state component; use {nameof(SetState)} with a component instead.");
+        
+        SetStateUnchecked(state, stateComponent);
+    }
+
+    /// <summary>
+    /// Sets the state of the game screen, using the given component to process that state.
+    /// </summary>
+    /// <param name="state"></param>
+    /// <param name="stateComponent"></param>
+    public void SetState(State state, IComponent stateComponent)
+    {
+        if (_stateComponents.ContainsKey(state))
+            throw new ArgumentException(
+                $"State {state} has a cached component; set {nameof(CurrentState)} directly to this state instead of calling {nameof(SetState)}.");
+
+        SetStateUnchecked(state, stateComponent);
+    }
+
+    private void SetStateUnchecked(State state, IComponent stateComponent)
+    {
+        // Remove the current state's component from the renderer
+        Map.DefaultRenderer!.SadComponents.Remove(_currentState.Component);
+
+        // Set new state
+        _currentState = (state, stateComponent);
+
+        // Add the new state's component to the renderer
+        Map.DefaultRenderer!.SadComponents.Add(_currentState.Component);
     }
 
     private void SetKeybindings(KeybindingsComponent<IScreenObject> component)
@@ -162,8 +185,7 @@ internal class MainGame : ScreenObject
         component.SetAction(Keys.C, () => Children.Add(new ConsumableSelect()));
 
         // "Look" functionality Keybindings
-        component.SetAction(Keys.OemQuestion, () => CurrentState = State.LookMode);
-        //component.SetAction(Keys.Escape, () => LookMode = false); // TODO: Remove this
+        component.SetAction(Keys.OemQuestion, () => SetState(State.LookMode));
     }
 
     /// <summary>
