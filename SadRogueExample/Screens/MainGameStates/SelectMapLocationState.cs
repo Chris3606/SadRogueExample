@@ -90,7 +90,7 @@ namespace SadRogueExample.Screens.MainGameStates
 
         public override void ProcessMouse(IScreenObject host, MouseScreenObjectState state, out bool handled)
         {
-            handled = true;
+            handled = false;
 
             // First frame, we will not actually change the look marker position; it will start on the player or some other target, and we want to keep
             // it that way until the user moves the mouse
@@ -112,10 +112,14 @@ namespace SadRogueExample.Screens.MainGameStates
                 // because we need the position relative to viewport/position, not position on the map.
                 _lastMousePosition = state.SurfaceCellPosition;
                 LookMarker.Position = state.SurfaceCellPosition;
+                handled = true;
             }
 
             if (state.Mouse.LeftClicked)
+            {
                 OnPositionSelected();
+                handled = true;
+            }
         }
 
         /// <summary>
