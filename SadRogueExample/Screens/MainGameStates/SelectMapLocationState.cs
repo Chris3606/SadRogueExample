@@ -58,7 +58,10 @@ namespace SadRogueExample.Screens.MainGameStates
             _getLookMarkerSurfaceStartingLocation = getLookMarkerSurfaceStartingLocation;
 
             // Create the console we'll use as the marker to show where the user is looking.
-            LookMarker = new(1, 1);
+            LookMarker = new(1, 1)
+            {
+                UseMouse = false
+            };
             LookMarker.Surface.Fill(Color.Transparent, _lookMarkerColor, 0);
             LookMarkerPosition = new(Point.Zero, Point.Zero);
 
