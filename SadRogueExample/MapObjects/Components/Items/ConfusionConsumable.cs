@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SadRogue.Integration;
-using SadRogue.Integration.Components;
-using SadRogue.Primitives;
+﻿using SadRogue.Integration;
 using SadRogueExample.MapObjects.Components.AI;
-using SadRogueExample.Screens;
 using SadRogueExample.Themes;
 
 namespace SadRogueExample.MapObjects.Components.Items;
@@ -24,6 +16,7 @@ internal class ConfusionConsumable : SingleTargetConsumable
     protected override bool OnUse(RogueLikeEntity target)
     {
         var currentAI = target.AllComponents.GetFirstOrDefault<AIBase>();
+        // TODO: Doing this here allows the targeter to have already accepted this position.  Ideally, this would be a targeter option instead
         if (currentAI == null)
         {
             Engine.GameScreen!.MessageLog.AddMessage(

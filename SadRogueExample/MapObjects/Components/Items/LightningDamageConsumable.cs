@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using SadConsole.Components;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogue.Primitives;
@@ -21,6 +17,8 @@ internal class LightningDamageConsumable: RogueLikeComponentBase<RogueLikeEntity
         Damage = damage;
         MaxRange = maxRange;
     }
+
+    public IComponent? GetStateHandler(RogueLikeEntity consumer) => null;
 
     public bool Consume(RogueLikeEntity consumer)
     {
