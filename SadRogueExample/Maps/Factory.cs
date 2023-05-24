@@ -98,8 +98,9 @@ internal static class Factory
                 var item = pctCheck switch
                 {
                     <0.7f => MapObjects.Items.Factory.HealthPotion(),
-                    <0.9f => MapObjects.Items.Factory.LightningScroll(),
-                    _ => MapObjects.Items.Factory.ConfusionScroll()
+                    <0.8f => MapObjects.Items.Factory.FireballScroll(),
+                    <0.9f => MapObjects.Items.Factory.ConfusionScroll(),
+                    _ => MapObjects.Items.Factory.LightningScroll()
                 };
                 item.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
                 map.AddEntity(item);

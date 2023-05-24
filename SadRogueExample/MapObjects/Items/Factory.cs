@@ -32,7 +32,6 @@ internal static class Factory
         return scroll;
     }
 
-    // TODO: Convert to SingleTargetConsumable
     public static RogueLikeEntity ConfusionScroll()
     {
         var scroll = new RogueLikeEntity(new Color(207, 63, 255), '~', layer: (int)GameMap.Layer.Items)
@@ -40,6 +39,17 @@ internal static class Factory
             Name = "Confusion Scroll"
         };
         scroll.AllComponents.Add(new ConfusionConsumable(10));
+
+        return scroll;
+    }
+
+    public static RogueLikeEntity FireballScroll()
+    {
+        var scroll = new RogueLikeEntity(new Color(255, 0, 0), '~', layer: (int)GameMap.Layer.Items)
+        {
+            Name = "Fireball Scroll"
+        };
+        scroll.AllComponents.Add(new FireballConsumable(12, 3));
 
         return scroll;
     }
