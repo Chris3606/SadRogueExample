@@ -50,8 +50,7 @@ internal class TargetSingleEntityState : SelectMapLocationState
     public override void OnAdded(IScreenObject host)
     {
         base.OnAdded(host);
-        
-        // TODO: Color
-        GameScreen.MessageLog.AddMessage(new("Select an enemy to target.", MessageColors.EnemyAtkAppearance));
+
+        GameScreen.MessageLog.AddMessage(new("Select an enemy to target.", MessageColors.NeedsTargetAppearance));
     }
 }

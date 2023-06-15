@@ -44,7 +44,7 @@ internal class LightningDamageConsumable: RogueLikeComponentBase<RogueLikeEntity
         }
 
         // Lightning damage bypasses defense.
-        Engine.GameScreen?.MessageLog.AddMessage(new($"A lightning bolt zaps the {target.Parent!.Name} with a loud thunder, for {Damage} damage!", MessageColors.PlayerAtkAppearance));
+        Engine.GameScreen?.MessageLog.AddMessage(new($"A lightning bolt zaps the {target.Parent!.Name} with a loud thunder, for {Damage} damage!"));
         target.HP -= Damage;
         
         return true;

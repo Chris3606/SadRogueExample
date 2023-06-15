@@ -38,7 +38,6 @@ internal class TargetAreaState : SelectMapLocationState
     {
         base.OnAdded(host);
 
-        // TODO: Color
-        GameScreen.MessageLog.AddMessage(new("Select an area to target.", MessageColors.EnemyAtkAppearance));
+        GameScreen.MessageLog.AddMessage(new("Select an area to target."));
     }
 }

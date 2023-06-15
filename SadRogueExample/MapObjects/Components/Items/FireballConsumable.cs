@@ -31,18 +31,15 @@ internal class FireballConsumable : AreaTargetConsumable
                     var combatant = entity.AllComponents.GetFirstOrDefault<Combatant>();
                     if (combatant == null) continue;
 
-                    // TODO: Color
-                    var color = entity == Engine.Player ? MessageColors.EnemyAtkAppearance : MessageColors.PlayerAtkAppearance;
                     Engine.GameScreen.MessageLog.AddMessage(
-                        new($"The {entity.Name} is engulfed in a fiery explosion, taking {Damage} damage!", color));
+                        new($"The {entity.Name} is engulfed in a fiery explosion, taking {Damage} damage!"));
                     combatant.HP -= Damage;
                     hitSomething = true;
                 }
             }
             
-            // TODO: Color
             if (!hitSomething)
-                Engine.GameScreen.MessageLog.AddMessage(new("A fireball explodes but doesn't hit anything!", MessageColors.PlayerAtkAppearance));
+                Engine.GameScreen.MessageLog.AddMessage(new("A fireball explodes but doesn't hit anything!"));
 
             return true;
         }

@@ -58,7 +58,6 @@ internal static class MessageColors
 
     /// <summary>
     /// Text indicating the player picked up an item.
-    /// TODO: Pick proper color
     /// </summary>
     public static readonly ColoredString.ColoredGlyphEffect ItemPickedUpAppearance = new()
     {
@@ -67,7 +66,6 @@ internal static class MessageColors
 
     /// <summary>
     /// Text indicating the player dropped an item.
-    /// TODO: Pick proper color
     /// </summary>
     public static readonly ColoredString.ColoredGlyphEffect ItemDroppedAppearance = new()
     {
@@ -80,5 +78,21 @@ internal static class MessageColors
     public static readonly ColoredString.ColoredGlyphEffect HealthRecoveredAppearance = new()
     {
         Foreground = new(0x0, 0xFF, 0x0)
+    };
+
+    /// <summary>
+    /// Text indicating that a used item needs a target.
+    /// </summary>
+    public static readonly ColoredString.ColoredGlyphEffect NeedsTargetAppearance = new()
+    {
+        Foreground = new(0x3F, 0xFF, 0xFF)
+    };
+
+    /// <summary>
+    /// Text indicating that a status effect was applied.
+    /// </summary>
+    public static readonly ColoredString.ColoredGlyphEffect StatusEffectAppliedAppearance = new()
+    {
+        Foreground = new(0x3F, 0xFF, 0xFF)
     };
 }

@@ -35,8 +35,7 @@ namespace SadRogueExample.MapObjects.Components.AI
                 var parent = Parent;
                 parent.AllComponents.Remove(this);
                 parent.AllComponents.Add(_previousAI);
-                // TODO: Choose color
-                Engine.GameScreen?.MessageLog.AddMessage(new($"{parent.Name} is no longer confused!", MessageColors.ImpossibleActionAppearance));
+                Engine.GameScreen?.MessageLog.AddMessage(new($"{parent.Name} is no longer confused!"));
             }
         }
     }

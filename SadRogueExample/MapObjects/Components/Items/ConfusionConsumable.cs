@@ -25,8 +25,7 @@ internal class ConfusionConsumable : SingleTargetConsumable
             return false;
         }
         target.AllComponents.Remove(currentAI);
-        // TODO: Color
-        Engine.GameScreen!.MessageLog.AddMessage(new($"The eyes of the {target.Name} look vacant, as it starts to stumble around!", MessageColors.EnemyAtkAppearance));
+        Engine.GameScreen!.MessageLog.AddMessage(new($"The eyes of the {target.Name} look vacant, as it starts to stumble around!", MessageColors.StatusEffectAppliedAppearance));
         target.AllComponents.Add(new ConfusedAI(NumberOfTurns, currentAI));
 
         return true;
