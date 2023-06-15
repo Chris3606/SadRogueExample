@@ -167,7 +167,6 @@ namespace SadRogueExample.Screens.MainGameStates
         private void LookMarker_PositionChanged(object? sender, SadConsole.ValueChangedEventArgs<Point> e)
         {
             // The entity position is in surface position; so we calculate the map position based on that
-            IScreenSurface s = (IScreenSurface)sender!;
             var newValue = e.NewValue + Radius;
             LookMarkerPosition = new(newValue, newValue + (Parent?.Surface.ViewPosition ?? Point.Zero));
 

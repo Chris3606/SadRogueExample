@@ -1,5 +1,4 @@
-﻿using SadConsole;
-using SadConsole.Components;
+﻿using SadConsole.Components;
 using SadRogue.Integration;
 
 namespace SadRogueExample.MapObjects.Components.Items;

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogueExample.MapObjects.Components.Items;
-using SadRogueExample.Screens;
 using SadRogueExample.Themes;
 
 namespace SadRogueExample.MapObjects.Components;

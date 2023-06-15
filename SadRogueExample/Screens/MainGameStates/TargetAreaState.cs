@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using SadConsole;
 using SadRogue.Primitives;
-using SadRogue.Primitives.GridViews;
 using SadRogueExample.Themes;
 
 namespace SadRogueExample.Screens.MainGameStates;

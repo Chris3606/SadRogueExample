@@ -1,6 +1,4 @@
 ﻿using System.Linq;
-using SadRogue.Integration;
-using SadRogue.Integration.Components;
 using SadRogue.Primitives;
 using SadRogueExample.Maps;
 

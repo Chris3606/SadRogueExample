@@ -1,6 +1,5 @@
 ﻿using SadRogue.Primitives;
 using SadRogueExample.Maps;
-using SadRogueExample.Themes;
 using ShaiRandom.Generators;
 
 namespace SadRogueExample.MapObjects.Components.AI

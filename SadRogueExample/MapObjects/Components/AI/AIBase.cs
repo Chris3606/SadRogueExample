@@ -1,12 +1,5 @@
 ﻿using SadRogue.Integration.Components;
 using SadRogue.Integration;
-using SadRogue.Primitives;
-using SadRogueExample.Maps;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SadRogueExample.MapObjects.Components.AI;
 
