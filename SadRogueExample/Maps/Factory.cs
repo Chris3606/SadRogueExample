@@ -17,9 +17,9 @@ namespace SadRogueExample.Maps;
 /// <param name="RoomMinSize">The minimum size of a room.</param>
 /// <param name="RoomMaxSize">The maximum size of a room.</param>
 /// <param name="MaxMonstersPerRoom">The maximum number of monsters that can spawn in a single room.</param>
-/// <param name="MaxPotionsPerRoom">The maximum number of health potions that can spawn in a single room.</param>
+/// <param name="MaxItemsPerRoom">The maximum number of items that can spawn in a single room.</param>
 public readonly record struct DungeonGenConfig(int Width, int Height, int MinRooms, int MaxRooms, int RoomMinSize,
-    int RoomMaxSize, int MaxMonstersPerRoom, int MaxPotionsPerRoom);
+    int RoomMaxSize, int MaxMonstersPerRoom, int MaxItemsPerRoom);
 
 /// <summary>
 /// Basic factory which produces different types of maps.
@@ -56,7 +56,7 @@ internal static class Factory
 
         // Spawn enemies/items/etc
         SpawnMonsters(map, rooms, config.MaxMonstersPerRoom);
-        SpawnPotions(map, rooms, config.MaxPotionsPerRoom);
+        SpawnItems(map, rooms, config.MaxItemsPerRoom);
 
         return map;
     }
@@ -86,17 +86,24 @@ internal static class Factory
         }
     }
 
-    private static void SpawnPotions(GameMap map, ItemList<Rectangle> rooms, int maxPotionsPerRoom)
+    private static void SpawnItems(GameMap map, ItemList<Rectangle> rooms, int maxItemsPerRoom)
     {
-        // Generate between zero and the max potions per room.
+        // Generate between zero and the max items per room.
         foreach (var room in rooms.Items)
         {
-            int potions = GlobalRandom.DefaultRNG.NextInt(0, maxPotionsPerRoom + 1);
-            for (int i = 0; i < potions; i++)
+            int items = GlobalRandom.DefaultRNG.NextInt(0, maxItemsPerRoom + 1);
+            for (int i = 0; i < items; i++)
             {
-                var potion = MapObjects.Items.Factory.HealthPotion();
-                potion.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
-                map.AddEntity(potion);
+                var pctCheck = GlobalRandom.DefaultRNG.NextFloat();
+                var item = pctCheck switch
+                {
+                    <0.7f => MapObjects.Items.Factory.HealthPotion(),
+                    <0.8f => MapObjects.Items.Factory.FireballScroll(),
+                    <0.9f => MapObjects.Items.Factory.ConfusionScroll(),
+                    _ => MapObjects.Items.Factory.LightningScroll()
+                };
+                item.Position = GlobalRandom.DefaultRNG.RandomPosition(room, pos => map.WalkabilityView[pos]);
+                map.AddEntity(item);
             }
         }
     }

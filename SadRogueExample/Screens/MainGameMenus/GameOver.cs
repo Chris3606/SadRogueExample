@@ -1,6 +1,5 @@
 ﻿using SadConsole;
 using SadConsole.UI.Controls;
-using SadRogueExample.MapObjects.Components;
 using System;
 
 namespace SadRogueExample.Screens.MainGameMenus
@@ -15,11 +14,6 @@ namespace SadRogueExample.Screens.MainGameMenus
         {
             Title = "Game Over!";
 
-            // Remove the player's keyboard handler to ensure they can't take actions
-            var keybindings = Parent.GetSadComponent<CustomPlayerKeybindingsComponent>();
-            if (keybindings != null)
-                Parent.SadComponents.Remove(keybindings);
-
             // Don't allow the player to close the menu
             CloseOnEscKey = false;
 
@@ -27,14 +21,14 @@ namespace SadRogueExample.Screens.MainGameMenus
             PrintTextAtCenter("You have died.", y: 2);
 
             // Place buttons for going to the main menu or exiting the game
-            var mainMenuButton = new Button(13, 1)
+            var mainMenuButton = new Button(13, height: 1)
             {
                 Text = "Main Menu",
                 Position = (2, 4),
             };
             mainMenuButton.Click += MainMenuOnClick;
 
-            var exitButton = new Button(11, 1)
+            var exitButton = new Button(11, height: 1)
             {
                 Text = "Exit",
                 Position = (16, 4),

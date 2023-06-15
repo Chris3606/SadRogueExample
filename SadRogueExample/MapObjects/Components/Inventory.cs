@@ -100,6 +100,13 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         if (idx == -1)
             throw new ArgumentException("Tried to consume a consumable that was not in the inventory.");
 
+        var stateHandler = consumable.GetStateHandler(Parent);
+        if (stateHandler != null)
+        {
+            Engine.GameScreen!.CurrentState = stateHandler;
+            return false; // We haven't consumed the item, so we'll return false.
+        }
+        
         bool result = consumable.Consume(Parent);
         if (!result) return false;
 

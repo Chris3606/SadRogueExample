@@ -1,4 +1,5 @@
-﻿using SadRogue.Integration;
+﻿using SadConsole.Components;
+using SadRogue.Integration;
 using SadRogue.Integration.Components;
 using SadRogueExample.Themes;
 
@@ -16,6 +17,8 @@ internal class HealingConsumable : RogueLikeComponentBase<RogueLikeEntity>, ICon
     {
         Amount = amount;
     }
+
+    public IComponent? GetStateHandler(RogueLikeEntity consumer) => null;
 
     public bool Consume(RogueLikeEntity consumer)
     {

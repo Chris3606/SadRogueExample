@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using SadConsole;
-using SadConsole.Input;
 using SadRogue.Integration;
-using SadRogue.Integration.Keybindings;
 using SadRogue.Primitives;
 using SadRogueExample.MapObjects.Components;
+using SadRogueExample.MapObjects.Components.AI;
 using SadRogueExample.Maps;
-using SadRogueExample.Screens.MainGameMenus;
 
 namespace SadRogueExample.MapObjects;
 
