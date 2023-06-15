@@ -31,9 +31,6 @@ internal class TargetAreaState : SelectMapLocationState
         return true;
     }
 
-    public IEnumerable<Point> PositionsSelected() //// TODO: Rad + 1?
-        => RadiusShape.PositionsInRadius(LookMarkerPosition.MapPosition, Radius, GameScreen.Map.Bounds());
-
     public override void OnAdded(IScreenObject host)
     {
         base.OnAdded(host);
