@@ -10,7 +10,11 @@ namespace SadRogueExample.Screens.MainGameMenus;
 internal class MainGameMenu : Window
 {
     public MainGameMenu(int width, int height)
-        : base(width, height)
+        : this(width, height, width, height)
+    { }
+
+    public MainGameMenu(int width, int height, int bufferWidth, int bufferHeight)
+        :base(width, height, bufferWidth, bufferHeight)
     {
         CloseOnEscKey = true;
         IsModalDefault = true;

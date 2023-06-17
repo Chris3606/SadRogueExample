@@ -42,7 +42,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
         Parent.CurrentMap.AddEntity(item);
 
         if (Parent == Engine.Player)
-            Engine.GameScreen?.MessageLog.AddMessage(new($"You dropped the {item.Name}.", MessageColors.ItemDroppedAppearance));
+            Engine.MessageLog.Add(new($"You dropped the {item.Name}.", MessageColors.ItemDroppedAppearance));
     }
 
     /// <summary>
@@ -68,7 +68,7 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             if (inventory.Items.Count >= inventory.Capacity)
             {
                 if (isPlayer)
-                    Engine.GameScreen?.MessageLog.AddMessage(new("Your inventory is full.",
+                    Engine.MessageLog.Add(new("Your inventory is full.",
                         MessageColors.ImpossibleActionAppearance));
                 return false;
             }
@@ -77,13 +77,13 @@ internal class Inventory : RogueLikeComponentBase<RogueLikeEntity>
             inventory.Items.Add(item);
 
             if (isPlayer)
-                Engine.GameScreen?.MessageLog.AddMessage(new($"You picked up the {item.Name}.",
+                Engine.MessageLog.Add(new($"You picked up the {item.Name}.",
                     MessageColors.ItemPickedUpAppearance));
 
             return true;
         }
         if (isPlayer)
-            Engine.GameScreen?.MessageLog.AddMessage(new("There is nothing here to pick up.", MessageColors.ImpossibleActionAppearance));
+            Engine.MessageLog.Add(new("There is nothing here to pick up.", MessageColors.ImpossibleActionAppearance));
         return false;
     }
 

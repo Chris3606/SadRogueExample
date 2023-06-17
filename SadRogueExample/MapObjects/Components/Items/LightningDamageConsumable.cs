@@ -39,12 +39,12 @@ internal class LightningDamageConsumable: RogueLikeComponentBase<RogueLikeEntity
 
         if (target == null)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new("There is no enemy close enough to strike.", MessageColors.ImpossibleActionAppearance));
+            Engine.MessageLog.Add(new("There is no enemy close enough to strike.", MessageColors.ImpossibleActionAppearance));
             return false;
         }
 
         // Lightning damage bypasses defense.
-        Engine.GameScreen?.MessageLog.AddMessage(new($"A lightning bolt zaps the {target.Parent!.Name} with a loud thunder, for {Damage} damage!"));
+        Engine.MessageLog.Add(new($"A lightning bolt zaps the {target.Parent!.Name} with a loud thunder, for {Damage} damage!"));
         target.HP -= Damage;
         
         return true;

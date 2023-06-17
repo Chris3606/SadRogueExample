@@ -19,7 +19,10 @@ namespace SadRogueExample.Screens.MainGameStates
             _keybindings = new MainMapKeybindingsComponent();
             // Add controls for picking up items and getting to inventory screen.
             _keybindings.SetAction(Keys.G, () => PlayerActionHelper.PlayerTakeAction(e => e.AllComponents.GetFirst<Inventory>().PickUp()));
+
+            // Controls for menus
             _keybindings.SetAction(Keys.C, () => GameScreen.Children.Add(new ConsumableSelect()));
+            _keybindings.SetAction(Keys.M, () => GameScreen.Children.Add(new MessageLogMenu(50, 24, 1000)));
 
             // "Look" functionality Keybinding
             _keybindings.SetAction(Keys.OemQuestion, () => GameScreen.CurrentState = new SelectMapLocationState(GameScreen));

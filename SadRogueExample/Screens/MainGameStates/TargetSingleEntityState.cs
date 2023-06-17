@@ -25,21 +25,21 @@ internal class TargetSingleEntityState : SelectMapLocationState
         var target = GameScreen.Map.GetEntityAt<RogueLikeEntity>(LookMarkerPosition.MapPosition);
         if (target == null)
         {
-            GameScreen.MessageLog.AddMessage(
+            Engine.MessageLog.Add(
                 new("You must select an enemy to target.", MessageColors.ImpossibleActionAppearance));
             return false;
         }
 
         if (!_allowTargetSelf && target == Engine.Player)
         {
-            GameScreen.MessageLog.AddMessage(
+            Engine.MessageLog.Add(
                     new("You cannot target yourself.", MessageColors.ImpossibleActionAppearance));
                 return false;
         }
 
         if (!_allowTargetNonVisible && !GameScreen.Map.PlayerFOV.BooleanResultView[target.Position])
         {
-            GameScreen.MessageLog.AddMessage(
+            Engine.MessageLog.Add(
                 new("You cannot target an area that you cannot see.", MessageColors.ImpossibleActionAppearance));
             return false;
         }
@@ -51,6 +51,6 @@ internal class TargetSingleEntityState : SelectMapLocationState
     {
         base.OnAdded(host);
 
-        GameScreen.MessageLog.AddMessage(new("Select an enemy to target.", MessageColors.NeedsTargetAppearance));
+        Engine.MessageLog.Add(new("Select an enemy to target.", MessageColors.NeedsTargetAppearance));
     }
 }

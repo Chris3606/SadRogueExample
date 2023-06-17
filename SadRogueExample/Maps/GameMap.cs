@@ -65,7 +65,7 @@ internal class GameMap : RogueLikeMap
                     return true;
 
         if (entity == Engine.Player)
-            Engine.GameScreen?.MessageLog.AddMessage(new("That way is blocked.", MessageColors.ImpossibleActionAppearance));
+            Engine.MessageLog.Add(new("That way is blocked.", MessageColors.ImpossibleActionAppearance));
 
         return false;
     }
@@ -114,7 +114,7 @@ internal class GameMap : RogueLikeMap
         var hostile = ((Combatant)s!).Parent!;
 
         // Display message in log
-        Engine.GameScreen?.MessageLog.AddMessage(new ColoredString($"The {hostile.Name} dies!",
+        Engine.MessageLog.Add(new ColoredString($"The {hostile.Name} dies!",
             MessageColors.EnemyDiedAppearance));
 
         // Switch entity for corpse

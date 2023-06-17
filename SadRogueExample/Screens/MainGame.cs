@@ -18,7 +18,7 @@ namespace SadRogueExample.Screens;
 internal class MainGame : ScreenObject
 {
     public readonly GameMap Map;
-    public readonly MessageLogConsole MessageLog;
+    public readonly MessageLogPanel MessagePanel;
     public readonly StatusPanel StatusPanel;
 
     /// <summary>
@@ -61,7 +61,7 @@ internal class MainGame : ScreenObject
         Map.DefaultRenderer.SadComponents.Add(ViewLock);
 
         // Create message log
-        MessageLog = new MessageLogConsole(Engine.ScreenWidth - StatusBarWidth - 1, BottomPanelHeight)
+        MessagePanel = new MessageLogPanel(Engine.ScreenWidth - StatusBarWidth - 1, BottomPanelHeight)
         {
             Parent = this,
             Position = new(StatusBarWidth + 1, Engine.ScreenHeight - BottomPanelHeight)
@@ -81,7 +81,14 @@ internal class MainGame : ScreenObject
         Engine.Player.AllComponents.GetFirst<Combatant>().Died += PlayerDeath;
 
         // Write welcome message
-        MessageLog.AddMessage(new("Hello and welcome, adventurer, to yet another dungeon!", MessageColors.WelcomeTextAppearance));
+        Engine.MessageLog.Add(new("Hello and welcome, adventurer, to yet another dungeon!", MessageColors.WelcomeTextAppearance));
+    }
+
+    public void Uninitialize()
+    {
+        MessagePanel.Parent = null;
+        StatusPanel.Parent = null;
+        Engine.Player.AllComponents.GetFirst<Combatant>().Died -= PlayerDeath;
     }
 
     /// <summary>
@@ -89,7 +96,7 @@ internal class MainGame : ScreenObject
     /// </summary>
     private void PlayerDeath(object? s, EventArgs e)
     {
-        MessageLog.AddMessage(new("You have died!", MessageColors.PlayerDiedAppearance));
+        Engine.MessageLog.Add(new("You have died!", MessageColors.PlayerDiedAppearance));
 
         Engine.Player.AllComponents.GetFirst<Combatant>().Died -= PlayerDeath;
 

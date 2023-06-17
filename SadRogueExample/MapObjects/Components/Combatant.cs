@@ -59,11 +59,11 @@ internal class Combatant : RogueLikeComponentBase<RogueLikeEntity>, IBumpable
         var atkTextColor = Parent == Engine.Player ? MessageColors.PlayerAtkAppearance : MessageColors.EnemyAtkAppearance;
         if (damage > 0)
         {
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} for {damage} damage.", atkTextColor));
+            Engine.MessageLog.Add(new($"{attackDesc} for {damage} damage.", atkTextColor));
             target.HP -= damage;
         }
         else
-            Engine.GameScreen?.MessageLog.AddMessage(new($"{attackDesc} but does no damage.", atkTextColor));
+            Engine.MessageLog.Add(new($"{attackDesc} but does no damage.", atkTextColor));
     }
 
     public bool OnBumped(RogueLikeEntity source)

@@ -21,7 +21,7 @@ internal class TargetAreaState : SelectMapLocationState
     {
         if (!_allowTargetNonVisible && !GameScreen.Map.PlayerFOV.BooleanResultView[LookMarkerPosition.MapPosition])
         {
-            GameScreen.MessageLog.AddMessage(
+            Engine.MessageLog.Add(
                                new("You cannot target an area that you cannot see.", MessageColors.ImpossibleActionAppearance));
             return false;
         }
@@ -33,6 +33,6 @@ internal class TargetAreaState : SelectMapLocationState
     {
         base.OnAdded(host);
 
-        GameScreen.MessageLog.AddMessage(new("Select an area to target."));
+        Engine.MessageLog.Add(new("Select an area to target."));
     }
 }

@@ -34,7 +34,7 @@ namespace SadRogueExample.MapObjects.Components.AI
                 var parent = Parent;
                 parent.AllComponents.Remove(this);
                 parent.AllComponents.Add(_previousAI);
-                Engine.GameScreen?.MessageLog.AddMessage(new($"{parent.Name} is no longer confused!"));
+                Engine.MessageLog.Add(new($"{parent.Name} is no longer confused!"));
             }
         }
     }

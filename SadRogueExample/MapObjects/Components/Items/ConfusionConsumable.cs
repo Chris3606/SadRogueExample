@@ -19,13 +19,13 @@ internal class ConfusionConsumable : SingleTargetConsumable
         // TODO: Doing this here allows the targeter to have already accepted this position.  Ideally, this would be a targeter option instead
         if (currentAI == null)
         {
-            Engine.GameScreen!.MessageLog.AddMessage(
+            Engine.MessageLog.Add(
                                        new("You cannot confuse an inanimate object.",
                                                                       MessageColors.ImpossibleActionAppearance));
             return false;
         }
         target.AllComponents.Remove(currentAI);
-        Engine.GameScreen!.MessageLog.AddMessage(new($"The eyes of the {target.Name} look vacant, as it starts to stumble around!", MessageColors.StatusEffectAppliedAppearance));
+        Engine.MessageLog.Add(new($"The eyes of the {target.Name} look vacant, as it starts to stumble around!", MessageColors.StatusEffectAppliedAppearance));
         target.AllComponents.Add(new ConfusedAI(NumberOfTurns, currentAI));
 
         return true;

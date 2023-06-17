@@ -13,7 +13,22 @@ internal static class Engine
     public const int ScreenWidth = 80;
     public const int ScreenHeight = 50;
 
-    public static MainGame? GameScreen;
+    private static MainGame? _gameScreen;
+
+    public static MainGame? GameScreen
+    {
+        get => _gameScreen;
+        set
+        {
+            if (_gameScreen == value) return;
+            
+            _gameScreen?.Uninitialize();
+            _gameScreen = value;
+        }
+    }
+
+    // Null override because it's initialized via Init
+    public static MessageLog MessageLog = null!;
 
     // Null override because it's initialized via new-game/load game
     public static RogueLikeEntity Player = null!;
@@ -28,6 +43,8 @@ internal static class Engine
 
     private static void Init()
     {
+        MessageLog = new MessageLog(1000);
+
         // Main menu
         GameHost.Instance.Screen = new MainMenu();
 
