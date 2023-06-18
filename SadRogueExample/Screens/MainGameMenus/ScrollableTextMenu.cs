@@ -8,7 +8,7 @@ namespace SadRogueExample.Screens.MainGameMenus;
 
 class ScrollableTextMenu : MainGameMenu
 {
-    private readonly ScrollBar _scrollBar;
+    protected readonly ScrollBar ScrollBar;
     private int _scrollOffset;
     private int _lastCursorY;
     private bool _allowInput;
@@ -57,23 +57,23 @@ class ScrollableTextMenu : MainGameMenu
         Cursor.IsEnabled = true;
 
         // Handle the scroll bar control
-        _scrollBar = new ScrollBar(Orientation.Vertical, Height)
+        ScrollBar = new ScrollBar(Orientation.Vertical, Height)
         {
             IsEnabled = false,
             Position = (Width - 1, 0)
         };
-        _scrollBar.ValueChanged += (sender, e) => MessageBuffer.ViewPosition = (0, _scrollBar.Value);
-        Controls.Add(_scrollBar);
+        ScrollBar.ValueChanged += (sender, e) => MessageBuffer.ViewPosition = (0, ScrollBar.Value);
+        Controls.Add(ScrollBar);
 
         Children.Add(MessageBuffer);
     }
 
-    public void Clear()
+    public virtual void Clear()
     {
         MessageBuffer.Clear();
         _scrollOffset = 0;
         Cursor.Position = (0, 0);
-        _scrollBar.IsEnabled = false;
+        ScrollBar.IsEnabled = false;
     }
 
     public override void Update(TimeSpan delta)
@@ -83,13 +83,13 @@ class ScrollableTextMenu : MainGameMenu
             _scrollOffset = MessageBuffer.Cursor.Position.Y - MessageBuffer.ViewHeight + 1;
 
         // Adjust the scroll bar
-        _scrollBar.IsEnabled = _scrollOffset != 0;
-        _scrollBar.Maximum = _scrollOffset;
+        ScrollBar.IsEnabled = _scrollOffset != 0;
+        ScrollBar.Maximum = _scrollOffset;
 
         // If auto-scrolling is enabled, scroll
-        if (_scrollBar.IsEnabled && AutomaticScroll && _lastCursorY != MessageBuffer.Cursor.Position.Y)
+        if (ScrollBar.IsEnabled && AutomaticScroll && _lastCursorY != MessageBuffer.Cursor.Position.Y)
         {
-            _scrollBar.Value = _scrollBar.Maximum;
+            ScrollBar.Value = ScrollBar.Maximum;
             _lastCursorY = MessageBuffer.Cursor.Position.Y;
         }
 

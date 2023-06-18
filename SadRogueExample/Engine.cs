@@ -1,5 +1,7 @@
-﻿using SadConsole;
+﻿using System.Linq;
+using SadConsole;
 using SadRogue.Integration;
+using SadRogue.Primitives;
 using SadRogueExample.Screens;
 
 namespace SadRogueExample;
@@ -44,6 +46,13 @@ internal static class Engine
     private static void Init()
     {
         MessageLog = new MessageLog(1000);
+        foreach (var i in Enumerable.Range(1, 100))
+        {
+            var foreground = new Color(GoRogue.Random.GlobalRandom.DefaultRNG.NextUInt());
+            foreground = new Color(foreground.R, foreground.G, foreground.B, (byte)255);
+            
+            MessageLog.Add(new($"This is test message {i}", foreground, Color.Transparent));
+        }
 
         // Main menu
         GameHost.Instance.Screen = new MainMenu();
