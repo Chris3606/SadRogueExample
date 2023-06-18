@@ -80,6 +80,8 @@ namespace SadRogueExample.Screens.MainGameMenus
             if (!_firstMessage && addNewline)
                 Cursor.NewLine();
 
+            TimesShiftedUp = 0;
+
             int oldY = Cursor.Position.Y;
 
             _firstMessage = false;

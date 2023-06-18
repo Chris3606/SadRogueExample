@@ -85,6 +85,7 @@ public class MessageLogPanel : Console
         if (!_firstMessage && addNewline)
             Cursor.NewLine();
 
+        TimesShiftedUp = 0;
         int oldY = Cursor.Position.Y;
 
         _firstMessage = false;
@@ -92,6 +93,6 @@ public class MessageLogPanel : Console
         var text = message.Count == 1 ? message.Text : message.Text + " (x" + message.Count.ToString() + ")";
         Cursor.Print(text);
 
-        _linesOfPreviousMessage = Cursor.Position.Y - oldY + 1;
+        _linesOfPreviousMessage = Cursor.Position.Y - oldY + 1 + TimesShiftedUp;
     }
 }
