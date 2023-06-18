@@ -1,4 +1,5 @@
-﻿using SadConsole;
+﻿using GoRogue;
+using SadConsole;
 
 namespace SadRogueExample.Screens.MainGameMenus
 {
@@ -6,6 +7,8 @@ namespace SadRogueExample.Screens.MainGameMenus
     {
         private bool _firstMessage;
         private int _linesOfPreviousMessage;
+
+        private ColoredGlyph[] _cachedTopRow;
 
         public MessageLogMenu(int width, int height, int bufferHeight)
             : base(width, height, bufferHeight)
@@ -15,6 +18,10 @@ namespace SadRogueExample.Screens.MainGameMenus
             AutomaticScroll = true;
             _firstMessage = true;
             _linesOfPreviousMessage = 0;
+
+            _cachedTopRow = new ColoredGlyph[MessageBuffer.Width];
+            for (int i = 0; i < MessageBuffer.Width; i++)
+                _cachedTopRow[i] = new ColoredGlyph();
 
             Cursor.AutomaticallyShiftRowsUp = true;
             ParentChanged += MessageLogMenu_ParentChanged;
@@ -80,16 +87,36 @@ namespace SadRogueExample.Screens.MainGameMenus
             if (!_firstMessage && addNewline)
                 Cursor.NewLine();
 
-            TimesShiftedUp = 0;
-
+            MessageBuffer.TimesShiftedUp = 0;
             int oldY = Cursor.Position.Y;
 
             _firstMessage = false;
 
+            // If the message we print is exactly the length of the console, SadConsole's cursor will automatically put in a new line.
+            // We don't want to waste that line, so we'll cache what the top line is so we can put it back if a new line we don't want
+            // gets placed during the print.
+            for (int x = 0; x < MessageBuffer.Width; x++)
+                MessageBuffer[x, 0].CopyAppearanceTo(_cachedTopRow[x], false);
+
             var text = message.Count == 1 ? message.Text : message.Text + " (x" + message.Count.ToString() + ")";
             Cursor.Print(text);
 
-            _linesOfPreviousMessage = Cursor.Position.Y - oldY + 1;
+            // We wrote to the last character of the console and shifted things down, but didn't write anything on the new line;
+            // so we'll put the original top row back.
+            if (Cursor.Position.X == 0)
+            {
+                if (MessageBuffer.TimesShiftedUp > 0)
+                {
+                    MessageBuffer.TimesShiftedUp--;
+                    MessageBuffer.ShiftDown(1);
+                    for (int x = 0; x < MessageBuffer.Width; x++)
+                        _cachedTopRow[x].CopyAppearanceTo(MessageBuffer[x, 0], false);
+                }
+                else
+                    Cursor.Position = Cursor.Position.Translate(0, -1);
+            }
+
+            _linesOfPreviousMessage = Cursor.Position.Y - oldY + 1 + MessageBuffer.TimesShiftedUp;
         }
     }
 }

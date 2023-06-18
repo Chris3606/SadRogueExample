@@ -1,4 +1,5 @@
-﻿using SadConsole;
+﻿using System.Diagnostics.CodeAnalysis;
+using SadConsole;
 using SadRogue.Primitives;
 
 namespace SadRogueExample.Screens.Surfaces;
@@ -10,6 +11,8 @@ public class MessageLogPanel : Console
 {
     private bool _firstMessage;
     private int _linesOfPreviousMessage;
+
+    private ColoredGlyph[] _cachedTopRow;
 
     public MessageLogPanel(int width, int height)
         : base(width, height)
@@ -29,8 +32,13 @@ public class MessageLogPanel : Console
         Initialize();
     }
 
+    [MemberNotNull(nameof(_cachedTopRow))]
     private void Initialize()
     {
+        _cachedTopRow = new ColoredGlyph[Width];
+        for (int i = 0; i < Width; i++)
+            _cachedTopRow[i] = new ColoredGlyph();
+
         _firstMessage = true;
         _linesOfPreviousMessage = 0;
 
@@ -90,8 +98,25 @@ public class MessageLogPanel : Console
 
         _firstMessage = false;
 
+        // If the message we print is exactly the length of the console, SadConsole's cursor will automatically put in a new line.
+        // We don't want to waste that line, so we'll cache what the top line is so we can put it back if a new line we don't want
+        // gets placed during the print.
+        for (int x = 0; x < Width; x++)
+            this[x, 0].CopyAppearanceTo(_cachedTopRow[x], false);
+
         var text = message.Count == 1 ? message.Text : message.Text + " (x" + message.Count.ToString() + ")";
         Cursor.Print(text);
+
+        // We wrote to the last character of the console and shifted things down, but didn't write anything on the new line;
+        // so we'll put the original top row back.
+        if (TimesShiftedUp > 0 && Cursor.Position.X == 0)
+        {
+            TimesShiftedUp--;
+
+            Surface.ShiftDown(1);
+            for (int x = 0; x < Width; x++)
+                _cachedTopRow[x].CopyAppearanceTo(this[x, 0], false);
+        }
 
         _linesOfPreviousMessage = Cursor.Position.Y - oldY + 1 + TimesShiftedUp;
     }
